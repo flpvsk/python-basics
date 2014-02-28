@@ -1,3 +1,8 @@
+''' Asks for name;
+Calculates sha1-hash from it;
+Writes hash to file.
+'''
+
 import sha
 
 name = raw_input("What's your first name? > ")
