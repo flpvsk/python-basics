@@ -1,1 +1,1 @@
-print "Vladimir test2"
+print "Vladimir"
