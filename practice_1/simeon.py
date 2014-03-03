@@ -1,6 +1,6 @@
 import sha
 
-name = raw_input("What's your first name? > ")
+name = raw_input("What's your third name? > ")
 name = name.lower()
 file_name = '{}.txt'.format(name)
 
