@@ -6,10 +6,10 @@ from utils import print_stars
 # should have `except` or `finally` or both
 print("assert False")
 try:
-    assert False
+    assert False, "Error message here"
     print("Execution continued")
 except AssertionError as e:
-    print("Exception caught")
+    print("Exception caught %r" % e.message)
 else:
     print("No exception thrown")
 finally:
