@@ -29,9 +29,11 @@ print_stars()
 
 # List comprehensions
 list_0 = [el for el in [1, 2, 3, 4]]
-list_1 = [2 ** el for el in [1, 2, 3, 4]]
-print("[el for el in [1, 2, 3, 4]] =      %r" % list_0)
-print("[2 ** el for el in [1, 2, 3, 4]] = %r" % list_1)
+list_map = [2 ** el for el in [1, 2, 3, 4]]
+list_filter = [el for el in [1, 2, 3, 4] if el % 2 == 0]
+print("[el for el in [1, 2, 3, 4]] =                %r" % list_0)
+print("[2 ** el for el in [1, 2, 3, 4]] =           %r" % list_map)
+print("[el for el in [1, 2, 3, 4] if el %% 2 == 0] = %r" % list_filter)
 print_stars()
 
 # for loop
