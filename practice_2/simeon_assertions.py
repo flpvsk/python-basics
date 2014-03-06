@@ -13,6 +13,6 @@ assert_not_in(a, b)
 # __init__.py
 # andrey.txt
 # hash_my_name.py
-# 
+
 # filipovski
 # AyratSaubanov
