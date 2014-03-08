@@ -216,16 +216,54 @@ test(assert_is_not_none([]), True)
 test(assert_is_not_none(()), True)
 test(assert_is_not_none(""), True)
 test(assert_is_not_none(None), False)
-test(assert_is_not_none(False), )
+test(assert_is_not_none(False), True)
 
 
 def assert_in(a, b):
-    pass
+    res = False
+    string = assert_is.__name__ + ": " + str(a) + ", " + str(b)
+    try:
+        assert a in b
+    except:
+        pass
+    else:
+        res = True
+    finally:
+        print string
+        return res
 
 #Tests
+divider("assert_in")
+test(assert_in(1, [2, 1]), True)
+test(assert_in([], [2, 1]), False)
+test(assert_in("r", "forever"), True)
+test(assert_in("fork", "forever"), False)
+test(assert_in(["one", "two"], ["one", ["one", "two"], "two"]), True)
+test(assert_in(["one", "two"], ["one", "two"]), False)
+test(assert_in(("one", "two"), ("one", ("one", "two"), "two")), True)
+test(assert_in(("one", "two"), ("one", "two")), False)
 
 
 def assert_not_in(a, b):
-    pass
+    res = False
+    string = assert_is.__name__ + ": " + str(a) + ", " + str(b)
+    try:
+        assert a not in b
+    except:
+        pass
+    else:
+        res = True
+    finally:
+        print string
+        return res
 
 #Tests
+divider("assert_not_in")
+test(assert_not_in(1, [2, 1]), False)
+test(assert_not_in([], [2, 1]), True)
+test(assert_not_in("r", "forever"), False)
+test(assert_not_in("fork", "forever"), True)
+test(assert_not_in(["one", "two"], ["one", ["one", "two"], "two"]), False)
+test(assert_not_in(["one", "two"], ["one", "two"]), True)
+test(assert_not_in(("one", "two"), ("one", ("one", "two"), "two")), False)
+test(assert_not_in(("one", "two"), ("one", "two")), True)
