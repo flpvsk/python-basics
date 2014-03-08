@@ -15,9 +15,14 @@ def dividers(x):
         print e.message
     return res
 
+
 print dividers(147)
 print dividers("s")
 
 
 def to_bool(lst):
-    pass
+    res = [bool(item) for item in lst]
+    return res
+
+print to_bool([])
+print to_bool([1, 0, [], ()])
