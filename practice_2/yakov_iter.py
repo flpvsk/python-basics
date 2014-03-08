@@ -16,10 +16,12 @@ def dividers(x):
         print e.message
     return res
 
-print "dividers"
-print dividers(147)
-print dividers("s")
-print dividers(-15)
+
+def test_dividers():
+    print "dividers"
+    print dividers(147)
+    print dividers("s")
+    print dividers(-15)
 
 
 def to_bool(lst):
@@ -30,8 +32,10 @@ def to_bool(lst):
         print e.message
     return res
 
-print "to_bool"
-print to_bool([])
-print to_bool([1, 0, [], ()])
-print to_bool(2)
-print to_bool((2, 4, 0))
+
+def test_to_bool(self):
+    print "to_bool"
+    print to_bool([])
+    print to_bool([1, 0, [], ()])
+    print to_bool(2)
+    print to_bool((2, 4, 0))
