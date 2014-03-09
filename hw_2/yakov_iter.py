@@ -19,5 +19,9 @@ def unique(lst):
 def test_unique():
     ya.divider("unique")
     ya.test(unique([1, 2, 3, 2, 1]), [1, 2, 3])
+    ya.test(unique([]), [])
+    ya.test(unique(["a", 1, [], (1, 2), [], "qw", (1, 2)]), ["a", 1, [],
+                                                              (1, 2), "qw"])
+    ya.test(unique([3, 2, 1]), [3, 2, 1])
 
-test_unique()
+#test_unique()
