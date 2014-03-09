@@ -48,3 +48,14 @@ def test_divide():
     ya.test(divide([2], [1]), fls)
 
 #test_divide()
+
+
+def wc(s):
+    pass
+
+
+def test_wc():
+    ya.divider("wc")
+    pass
+
+test_wc()
