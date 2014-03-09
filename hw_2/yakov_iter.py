@@ -18,11 +18,11 @@ def unique(lst):
 
 def test_unique():
     ya.divider("unique")
-    ya.test(unique([1, 2, 3, 2, 1]), [1, 2, 3])
-    ya.test(unique([]), [])
-    ya.test(unique(["a", 1, [], (1, 2), [], "qw", (1, 2)]), ["a", 1, [],
-                                                              (1, 2), "qw"])
-    ya.test(unique([3, 2, 1]), [3, 2, 1])
+    print ya.assert_equal(unique([1, 2, 3, 2, 1]), [1, 2, 3])
+    print ya.assert_equal(unique([]), [])
+    print ya.assert_equal(unique(["a", 1, [], (1, 2), [], "qw", (1, 2)]),
+                          ["a", 1, [], (1, 2), "qw"])
+    print ya.assert_equal(unique([3, 2, 1]), [3, 2, 1])
 
 #test_unique()
 
@@ -40,12 +40,12 @@ def divide(a, b):
 def test_divide():
     ya.divider("divide")
     fls = [False, None]
-    ya.test(divide(10, 0), fls)
-    ya.test(divide(0, 10), [True, 0])
-    ya.test(divide("abc", "fgh"), fls)
-    ya.test(divide("100", "50"), fls)
-    ya.test(divide(-5.0, -2.0), [True, 2.5])
-    ya.test(divide([2], [1]), fls)
+    print ya.assert_equal(divide(10, 0), fls)
+    print ya.assert_equal(divide(0, 10), [True, 0])
+    print ya.assert_equal(divide("abc", "fgh"), fls)
+    print ya.assert_equal(divide("100", "50"), fls)
+    print ya.assert_equal(divide(-5.0, -2.0), [True, 2.5])
+    print ya.assert_equal(divide([2], [1]), fls)
 
 #test_divide()
 
