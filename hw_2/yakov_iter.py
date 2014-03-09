@@ -49,13 +49,25 @@ def test_divide():
 
 #test_divide()
 
+sym = "symbols"
+wrd = "words"
+lns = "lines"
+
 
 def wc(s):
-    pass
+    res = {sym: 0, wrd: 0, lns: 0}
+    return res
 
 
 def test_wc():
     ya.divider("wc")
-    pass
+    exp1 = {sym: 10, wrd: 1, lns: 1}
+    exp2 = {sym: 0, wrd: 0, lns: 0}
+    exp3 = {sym: 5, wrd: 3, lns: 3}
+    ya.test(wc("abcdefghij"), exp1)
+    ya.test(wc(""), exp2)
+    ya.test(wc("a\nb\nc"), exp3)
+    ya.test(wc(1), exp2)
+    ya.test(wc(["a", "bd"]), exp2)
 
 test_wc()
