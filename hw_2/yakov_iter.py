@@ -64,7 +64,9 @@ def wc(st):
             # Find symbols number
             s = len(st)
             # Find words number
+            w = len(st.split())
             # Find lines number
+            l = len(st.split("\n"))
         except:
             pass
         res = {sym: s, wrd: w, lns: l}
@@ -73,13 +75,11 @@ def wc(st):
 
 def test_wc():
     ya.divider("wc")
-    exp1 = {sym: 10, wrd: 1, lns: 1}
-    exp2 = {sym: 0, wrd: 0, lns: 0}
-    exp3 = {sym: 5, wrd: 3, lns: 3}
-    print ya.assert_equal(wc("abcdefghij"), exp1)
-    print ya.assert_equal(wc(""), exp2)
-    print ya.assert_equal(wc("a\nb\nc"), exp3)
-    print ya.assert_equal(wc(1), exp2)
-    print ya.assert_equal(wc(["a", "bd"]), exp2)
+    zero = {sym: 0, wrd: 0, lns: 0}
+    print ya.assert_equal(wc("abcdefghij"), {sym: 10, wrd: 1, lns: 1})
+    print ya.assert_equal(wc(""), zero)
+    print ya.assert_equal(wc("a\nb\nc"), {sym: 5, wrd: 3, lns: 3})
+    print ya.assert_equal(wc(1), zero)
+    print ya.assert_equal(wc(["a", "bd"]), zero)
 
 test_wc()
