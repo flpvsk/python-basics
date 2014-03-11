@@ -20,7 +20,7 @@ def assert_is(a, b):
     
 def assert_is_not(a, b):
     if a is b:
-        raise AssertionError("'{}' is identical to '{}'".format(id(a), id(b)))
+        raise AssertionError("'{}' is identical to '{}'".format(id(a),id(b)))
     
 def assert_is_none(x):
     if x is not None:

@@ -129,7 +129,7 @@ print("Test 'assert_false' function")
 print_stars()
 x = ""
 assert_false_test(x)
-x = "String"
+x = " String "
 assert_false_test(x)
 
 print("Test 'assert_is' function")
