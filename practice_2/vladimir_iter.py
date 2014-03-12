@@ -10,3 +10,8 @@ def dividers(x):
 
 print dividers(10)
 print dividers(100)
+
+def to_bool(lst):
+    return [bool(i) for i in lst]
+
+print to_bool([0, 1, '', 'a'])
