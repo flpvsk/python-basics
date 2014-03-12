@@ -1,3 +1,5 @@
+import re
+
 def unique(l):
     return list(set(l))
 
@@ -15,3 +17,18 @@ print(divide(4, 5))
 print(divide(4, False))
 print(divide(4, None))
 print(divide(4, 2))
+
+
+def wc(s):
+    return {"symbols": len(re.findall(r'\w', s)),
+            "words": len(re.findall(r'\w\w*', s)),
+            "lines": s.count("\n") + 1}
+
+s = """d   ss
+                   ddd
+123_45f
+dd
+d"""
+
+print(wc(s))
+print(re.findall(r'\w', s))
