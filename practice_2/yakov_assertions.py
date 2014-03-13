@@ -14,18 +14,14 @@ def test(res, exp):
     print res == exp
 
 
-def assert_equal(a, b):
-    res = False
-    string = assert_equal.__name__ + ": " + str(a) + ", " + str(b)
-    try:
-        assert a == b
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def args_to_str(*args):
+    return " " + str(args)
+
+fl = "Assertion failed."
+
+
+def assert_equal(a, b, message=fl):
+    assert a == b, message + args_to_str(a, b)
 
 
 #Tests
@@ -40,19 +36,10 @@ def test_assert_equal():
     test(assert_equal((2, 3), (2, 3)), True)
     test(assert_equal((2, 3), (2)), False)
 
+#test_assert_equal()
 
-def assert_not_equal(a, b):
-    res = False
-    string = assert_not_equal.__name__ + ": " + str(a) + ", " + str(b)
-    try:
-        assert a != b
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def assert_not_equal(a, b, message=fl):
+    assert a != b, message
 
 
 #Tests
@@ -68,18 +55,8 @@ def test_assert_not_equal():
     test(assert_not_equal((2, 3), (2)), True)
 
 
-def assert_true(x):
-    res = False
-    string = assert_true.__name__ + ": " + str(x)
-    try:
-        assert x
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def assert_true(x, message=fl):
+    assert x, message
 
 
 #Tests
@@ -91,18 +68,8 @@ def test_assert_true():
     test(assert_true(10 > 11), False)
 
 
-def assert_false(x):
-    res = False
-    string = assert_false.__name__ + ": " + str(x)
-    try:
-        assert not x
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def assert_false(x, message=fl):
+    assert not x, message
 
 
 #Tests
@@ -114,18 +81,8 @@ def test_assert_false():
     test(assert_false(10 > 11), True)
 
 
-def assert_is(a, b):
-    res = False
-    string = assert_is.__name__ + ": " + str(a) + ", " + str(b)
-    try:
-        assert a is b
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def assert_is(a, b, message=fl):
+    assert a is b, message
 
 
 #Tests
@@ -149,18 +106,8 @@ def test_assert_is():
     test(assert_is(c, d), False)
 
 
-def assert_is_not(a, b):
-    res = False
-    string = assert_is.__name__ + ": " + str(a) + ", " + str(b)
-    try:
-        assert a is not b
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def assert_is_not(a, b, message=fl):
+    assert a is not b, message
 
 
 #Tests
@@ -184,18 +131,8 @@ def test_assert_is_not():
     test(assert_is_not(c, d), True)
 
 
-def assert_is_none(x):
-    res = False
-    string = assert_false.__name__ + ": " + str(x)
-    try:
-        assert x is None
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def assert_is_none(x, message=fl):
+    assert x is None, message
 
 
 #Tests
@@ -209,18 +146,8 @@ def test_assert_is_none():
     test(assert_is_none(False), False)
 
 
-def assert_is_not_none(x):
-    res = False
-    string = assert_false.__name__ + ": " + str(x)
-    try:
-        assert x is not None
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def assert_is_not_none(x, message=fl):
+    assert x is not None, message
 
 
 #Tests
@@ -234,18 +161,8 @@ def test_assert_is_not_none():
     test(assert_is_not_none(False), True)
 
 
-def assert_in(a, b):
-    res = False
-    string = assert_is.__name__ + ": " + str(a) + ", " + str(b)
-    try:
-        assert a in b
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def assert_in(a, b, message=fl):
+    assert a in b, message
 
 
 #Tests
@@ -261,18 +178,8 @@ def test_assert_in():
     test(assert_in(("one", "two"), ("one", "two")), False)
 
 
-def assert_not_in(a, b):
-    res = False
-    string = assert_is.__name__ + ": " + str(a) + ", " + str(b)
-    try:
-        assert a not in b
-    except:
-        pass
-    else:
-        res = True
-    finally:
-        print string
-        return res
+def assert_not_in(a, b, message=fl):
+    assert a not in b, message
 
 
 #Tests
