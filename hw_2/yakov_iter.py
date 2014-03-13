@@ -7,24 +7,21 @@ import practice_2.yakov_assertions as ya
 
 
 def unique(lst):
-    res = []
-    i = 0
-    for item in lst:
-        if lst.index(item) == i:
-            res.append(item)
-        i = i + 1
-    return res
+    dic = dict()
+    res = dic.fromkeys(lst)
+    return res.keys()
 
 
 def test_unique():
     ya.divider("unique")
     print ya.assert_equal(unique([1, 2, 3, 2, 1]), [1, 2, 3])
     print ya.assert_equal(unique([]), [])
-    print ya.assert_equal(unique(["a", 1, [], (1, 2), [], "qw", (1, 2)]),
-                          ["a", 1, [], (1, 2), "qw"])
-    print ya.assert_equal(unique([3, 2, 1]), [3, 2, 1])
+    print ya.assert_equal(unique(["a", 1, (1, 2), "qw", (1, 2)]),
+                          ["a", 1, (1, 2), "qw"])
+    l = [3, 2, 1]
+    print ya.assert_equal(unique(l), [1, 2, 3])
 
-#test_unique()
+test_unique()
 
 
 def divide(a, b):
