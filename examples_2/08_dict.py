@@ -29,3 +29,7 @@ print_stars()
 del d['key1']
 print("'key1' in d: %r" % ('key1' in d))
 print("'key2' in d: %r" % ('key2' in d))
+
+#defualtdict
+d=defaultdict(list)
+d[1]
