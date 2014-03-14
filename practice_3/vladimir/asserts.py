@@ -9,7 +9,7 @@ def assert_equal(a, b, message="Not Equal"):
     if a == b:
         return True
     else:
-        raise AssertionError(message)(message)
+        raise AssertionError(message)
 
 
 def assert_not_equal(a, b, message="Equal"):
@@ -73,6 +73,3 @@ def assert_not_in(a, b, message="In"):
         return True
     else:
         raise AssertionError(message)
-
-
-print assert_equal(1, 2, "Assertion failed")
