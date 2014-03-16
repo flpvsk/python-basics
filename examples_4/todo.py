@@ -5,20 +5,25 @@ description, `status` is either 'pending' or 'completed'.
 E.g. ('Create todo app', 'pending')
 
     >>> from examples_4 import todo
+
     >>> todo.add('Sandwich')
     0
     >>> todo.items()
     (('Sandwich', 'pending'),)
+
     >>> todo.add('Sandwich')
     0
+
     >>> todo.add('Tests for todo lib')
     1
     >>> todo.items()
     (('Sandwich', 'pending'), ('Tests for todo lib', 'pending'))
+
     >>> todo.status_by_index(0)
     'pending'
     >>> todo.status_by_text('Sandwich')
     'pending'
+
     >>> todo.mark_completed_by_index(1)
     >>> todo.status_by_index(1)
     'completed'
@@ -26,11 +31,13 @@ E.g. ('Create todo app', 'pending')
     'completed'
     >>> todo.items()
     (('Sandwich', 'pending'), ('Tests for todo lib', 'completed'))
+
     >>> todo.mark_completed_by_text('Sandwich')
     >>> todo.status_by_text('Sandwich')
     'completed'
     >>> todo.items()
     (('Sandwich', 'completed'), ('Tests for todo lib', 'completed'))
+
     >>> todo.clear()
     >>> todo.items()
     ()
