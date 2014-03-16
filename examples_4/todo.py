@@ -45,7 +45,7 @@ _todos = []
 
 
 def _index_by_text(text):
-    """Get index of todo item by its text"""
+    """Get index of todo item by its text."""
     return [el[0] for el in _todos].index(text)
 
 
@@ -81,27 +81,28 @@ def items():
 
 
 def status_by_index(index):
-    """Get status of todo task by its index"""
+    """Get status of todo task by its index."""
     return _todos[index][1]
 
 
 def status_by_text(text):
-    """Get status of todo task by its text"""
+    """Get status of todo task by its text."""
     index = _index_by_text(text)
     return status_by_index(index)
 
 
 def mark_completed_by_index(index):
-    """Mark item as 'completed' by its index"""
+    """Mark item as 'completed' by its index."""
     todo_text = _todos[index][0]
     _todos[index] = (todo_text, COMPLETED)
 
 
 def mark_completed_by_text(text):
-    """Mark item as 'completed' by its text"""
+    """Mark item as 'completed' by its text."""
     index = _index_by_text(text)
     mark_completed_by_index(index)
 
 
 def clear():
+    """Clear todo list"."""
     del _todos[:]
