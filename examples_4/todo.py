@@ -31,6 +31,9 @@ E.g. ('Create todo app', 'pending')
     'completed'
     >>> todo.items()
     (('Sandwich', 'completed'), ('Tests for todo lib', 'completed'))
+    >>> todo.clear()
+    >>> todo.items()
+    ()
 """
 
 # Possible todo statuses
@@ -99,3 +102,6 @@ def mark_completed_by_text(text):
     index = _index_by_text(text)
     mark_completed_by_index(index)
 
+
+def clear():
+    del _todos[:]
