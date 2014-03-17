@@ -39,7 +39,8 @@ def clear_state():
     del failed_tests_list[:]
     del passed_tests_list[:]
     
-            
-    
+
+
+        
         
     
