@@ -7,7 +7,26 @@ Created on 08 March 2014.
 
 def divider(string):
     stars = "*****"
-    print("\n {}".format(stars + " " + string + " " + stars))
+    print "\n {0} {1} {0}".format(stars, string)
+    #print("\n {}".format(stars + " " + string + " " + stars))
+
+
+def test_pass(fn, *args):
+    try:
+        fn(*args)
+    except:
+        print "{0}{1} failed".format(fn.__name__, args)
+    else:
+        print "{0}{1} passed".format(fn.__name__, args)
+
+
+def test_fail(fn, *args):
+    try:
+        fn(*args)
+    except:
+        print "{0}{1} passed".format(fn.__name__, args)
+    else:
+        print "{0}{1} failed".format(fn.__name__, args)
 
 
 def test(res, exp):
@@ -27,16 +46,17 @@ def assert_equal(a, b, message=fl):
 #Tests
 def test_assert_equal():
     divider("assert_equal")
-    test(assert_equal(1, 1), True)
-    test(assert_equal(1, 2), False)
-    test(assert_equal("abc", "abc"), True)
-    test(assert_equal("qwerty ", "qwerty"), False)
-    test(assert_equal([2, 3], [2, 3]), True)
-    test(assert_equal([2, 3], [2]), False)
-    test(assert_equal((2, 3), (2, 3)), True)
-    test(assert_equal((2, 3), (2)), False)
+    test_pass(assert_equal, 1, 1)
+    test_fail(assert_equal, 1, 2)
+    test_pass(assert_equal, "abc", "abc")
+    test_fail(assert_equal, "qwerty ", "qwerty")
+    test_pass(assert_equal, [2, 3], [2, 3])
+    test_fail(assert_equal, [2, 3], [2])
+    test_pass(assert_equal, (2, 3), (2, 3))
+    test_fail(assert_equal, (2, 3), (2))
 
-#test_assert_equal()
+test_assert_equal()
+
 
 def assert_not_equal(a, b, message=fl):
     assert a != b, message

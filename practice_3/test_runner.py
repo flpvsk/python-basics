@@ -10,28 +10,40 @@ tests = dict()
 
 
 def add_test(fn):
-    pass
+    tests[fn.__name__] = None
 
 
 def pending_tests():
-    pass
+    return [func for func in tests.keys() if tests[func] == None]
 
 
 def run():
-    pass
+    return (len(ran_tests()), len(passed_tests()), len(failed_tests()))
 
 
 def ran_tests():
-    pass
+    return [func for func in tests.keys() if tests[func] != None]
 
 
 def passed_tests():
-    pass
+    return [func for func in tests.keys() if tests[func] == 0]
 
 
 def failed_tests():
-    pass
+    return [func for func in tests.keys() if tests[func] == 1]
 
 
 def clear_state():
+    for func in tests.keys():
+        tests[func] = None
+
+
+def q():
     pass
+
+
+add_test(q)
+
+print pending_tests()
+
+print run()
