@@ -19,7 +19,9 @@ def run():
     for test in pending_tests_list:
         try:
             test()
-        except AssertionError:
+        except BaseException as e:
+            print("Test {} failed - Exception caught: {}".format(test.__name__,
+                                                                  e.message))
             failed_tests_list.append(test)
         else:
             passed_tests_list.append(test)

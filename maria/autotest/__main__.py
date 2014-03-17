@@ -9,9 +9,10 @@ if __name__ == '__main__':
     package_name = sys.argv[1]
     module = importlib.import_module(package_name)
     for func in dir(module):
-        if func in module.__all__ and not (func.startswith("__") and func.endswith("__")):
+        if func in module.__all__ and not (func.startswith("__") and
+                                           func.endswith("__")):
             clear_state()
-            add_test(getattr(module,func))
+            add_test(getattr(module, func))
             run()
             if len(failed_tests()) != 0:
                 sys.exit(1)
