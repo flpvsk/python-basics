@@ -5,12 +5,12 @@ Created on Mar 13, 2014
 '''
 
 # key: test
-# value: None, 0-passed, 1-failed
+# value: None-pending, 0-passed, 1-failed
 tests = dict()
 
 
 def add_test(fn):
-    tests[fn.__name__] = None
+    tests[fn] = None
 
 
 def pending_tests():
@@ -18,6 +18,14 @@ def pending_tests():
 
 
 def run():
+    to_run = pending_tests()
+    for tst in to_run:
+        try:
+            tst()
+        except:
+            tests[tst] = 1
+        else:
+            tests[tst] = 0
     return (len(ran_tests()), len(passed_tests()), len(failed_tests()))
 
 
@@ -34,16 +42,24 @@ def failed_tests():
 
 
 def clear_state():
-    for func in tests.keys():
-        tests[func] = None
+    tests.clear()
 
 
+#Testing
 def q():
-    pass
+    return 0
 
 
-add_test(q)
+def p():
+    raise "asd"
 
-print pending_tests()
 
-print run()
+def framework_testing():
+    add_test(q)
+    add_test(p)
+    print "Pending: {0}".format(pending_tests())
+    print "Ran, passed, failed: {0}".format(run())
+    print "Passed: {0}".format(passed_tests())
+    print "Failed: {0}".format(failed_tests())
+
+#framework_testing()
