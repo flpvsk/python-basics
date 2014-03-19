@@ -12,3 +12,12 @@ def dividers(x):
 print 'test dividers\n'
 dividers(10)
 dividers(100)
+
+def to_bool(lst):
+    lst2 = []
+    for i in lst:
+        lst2.append(bool(i))
+    print lst2
+print '\ntest to_bool\n'
+to_bool([0, 1, '', 'a'])
+to_bool(['i', -1, '%'])
