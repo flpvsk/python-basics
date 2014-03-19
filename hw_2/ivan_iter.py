@@ -3,6 +3,12 @@ Created on 18 Mar 2014
  
 @author: paraiva
 '''
+def unique(lst):
+    newset=set(lst)
+    print list(newset)
+print 'uique function test:\n'
+unique([1, 2, 1, 3, 4, 3, 3, 3])
+
 def wc(s):
     
     res = {'Symbols': None, 'Words': None, 'Lines': 1 }
@@ -32,6 +38,7 @@ def wc(s):
     return res
  
 #Some tests
+print '\nwc function tests\n'
 print wc("One two three")
 print wc("One\ntwo\nthree")
 print wc('')
