@@ -7,6 +7,7 @@ Created on Mar 13, 2014
 __all__ = ["add_test", "passed_tests", "pending_tests", "ran_tests", \
            "failed_tests", "clear_state", "run"]
 
+from vladimir.autotest import assert_true, assert_not_equal
 
 pending = []
 passed = []
@@ -14,8 +15,9 @@ failed = []
 ran = []
 
 
-def add_test(fn):
-    pending.append(fn)
+def add_test(fn, *args):
+    global pending
+    pending.append((fn, args))
 
 
 def passed_tests():
@@ -40,12 +42,13 @@ def clear_state():
 
 
 def run():
-    for i in pending_tests:
+    global pending, passed, failed, ran
+    for i in pending_tests():
         try:
-            i
-            passed.append(pending.pop(i))
+            i[0](*i[1])
+            passed.append(i)
         except:
-            failed.append(pending.pop(i))
+            failed.append(i)
         finally:
             ran.append(i)
     ran = len(ran)
@@ -53,3 +56,9 @@ def run():
     failed = len(failed)
     return (ran, passed, failed)
 
+
+add_test(assert_true, True)
+add_test(assert_true, False)
+add_test(assert_not_equal, 3, 3)
+add_test(assert_not_equal, 3, 3)
+print pending_tests()

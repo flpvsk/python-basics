@@ -8,6 +8,7 @@ __all__ = ["assert_equal", "assert_not_equal", "assert_true", "assert_false", \
            "assert_is", "assert_is_not", "assert_is_none", \
            "assert_is_not_none", "assert_in"]
 
+
 def assert_equal(a, b, message="Not Equal"):
     if a == b:
         return True
