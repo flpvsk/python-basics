@@ -9,6 +9,17 @@ def unique(lst):
 print 'uique function test:\n'
 unique([1, 2, 1, 3, 4, 3, 3, 3])
 
+def divide(a, b):
+    try:
+        result = a / b
+        print '(True, %i)' % result
+    except:
+        print "(False, None)"
+print '\ndivide function test:\n'
+divide(1, 0)
+divide([], 4)
+divide(4, 2)
+
 def wc(s):
     
     res = {'Symbols': None, 'Words': None, 'Lines': 1 }
