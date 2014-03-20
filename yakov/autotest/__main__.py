@@ -6,12 +6,18 @@ Created on Mar 20, 2014
 import sys
 import importlib
 import runner as run
-import assertions as ass
 
 
 def path_to_module(path):
+    #print path
     parts = path.split("\\")
-    module = ".".join(parts[2:])
+    if len(parts) == 1:
+        parts = path.split("/")
+    if parts[0] == '':
+        parts.pop(0)
+    #print parts
+    module = ".".join(parts)
+    #print module
     return module.replace('.py', '')
 
 
@@ -24,7 +30,7 @@ def prepare_tests_to_run():
     run.clear_state()
     for t in tm.__all__:
         run.add_test(getattr(tm, t))
-    print run.pending_tests()
+    #print run.pending_tests()
 
 
 def execute_tests():
