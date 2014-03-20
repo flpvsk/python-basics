@@ -7,17 +7,21 @@ Created on Mar 13, 2014
 __all__ = ['add_test', 'pending_tests', 'run', 'ran_tests', 'passed_tests',
            'failed_tests', 'clear_state']
 
+PENDING = "pending"
+PASSED = "passed"
+FAILED = "failed"
+
 # key: test
 # value: None-pending, 0-passed, 1-failed
 tests = dict()
 
 
 def add_test(fn):
-    tests[fn] = None
+    tests[fn] = PENDING
 
 
 def pending_tests():
-    return [func for func in tests.keys() if tests[func] == None]
+    return [func for func in tests.keys() if tests[func] == PENDING]
 
 
 def run():
@@ -26,22 +30,22 @@ def run():
         try:
             tst()
         except:
-            tests[tst] = 1
+            tests[tst] = FAILED
         else:
-            tests[tst] = 0
+            tests[tst] = PASSED
     return (len(ran_tests()), len(passed_tests()), len(failed_tests()))
 
 
 def ran_tests():
-    return [func for func in tests.keys() if tests[func] != None]
+    return [func for func in tests.keys() if tests[func] != PENDING]
 
 
 def passed_tests():
-    return [func for func in tests.keys() if tests[func] == 0]
+    return [func for func in tests.keys() if tests[func] == PASSED]
 
 
 def failed_tests():
-    return [func for func in tests.keys() if tests[func] == 1]
+    return [func for func in tests.keys() if tests[func] == FAILED]
 
 
 def clear_state():
