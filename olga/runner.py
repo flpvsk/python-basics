@@ -1,5 +1,5 @@
-#from assert_message import *
-import assert_message
+#from assertions import test_assert_equal, test_assert_not_equal, test_assert_is_none
+import assertions
 class runner():
     tests = {}
     
@@ -13,7 +13,7 @@ class runner():
         for x in self.tests:
             if self.tests[x] == "pending":
                 try:
-                    test = getattr(assert_message, x)
+                    test = getattr(assertions, x)
                     test()
                     self.tests[x] = "passed"
                 except:
@@ -33,21 +33,19 @@ class runner():
         self.tests = {}
     
 
-my_runner = runner()
-my_runner.add_test(assert_message.test1)
-print my_runner.tests
-
-my_runner.add_test(assert_message.test2)
-print my_runner.tests
-
-my_runner.add_test(assert_message.test3)
-print my_runner.tests
-
-
-my_runner.run()
-print my_runner.tests
-
-print my_runner.failed_tests()
-
-print my_runner.passed_tests()
+if __name__ == "__main__":
+    my_runner = runner()
+    my_runner.add_test(assertions.test_assert_equal)
+    print my_runner.tests
+    
+    my_runner.add_test(assertions.test_assert_is_none)
+    print my_runner.tests
+    
+    my_runner.add_test(assertions.test_assert_not_equal)
+    print my_runner.tests
+    
+    my_runner.run()
+    print my_runner.tests
+    print my_runner.failed_tests()
+    print my_runner.passed_tests()
 
