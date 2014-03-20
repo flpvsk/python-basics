@@ -25,11 +25,13 @@ print_stars()
 print('len("12345"): {}'.format(len("12345")))
 print_stars()
 
-# c-style format: http://docs.python.org/2/library/stdtypes.html#string-formatting
+# c-style format:
+#http://docs.python.org/2/library/stdtypes.html#string-formatting
 print('c-style format: %d' % 1.0)
 print_stars()
 
-# python-style format: http://docs.python.org/2/library/string.html#format-string-syntax
+# python-style format:
+# http://docs.python.org/2/library/string.html#format-string-syntax
 
 # indexes and slices
 my_string = "My String"
@@ -41,7 +43,7 @@ print("my_string[1:-1:3]: {!r}".format(my_string[1:-1:3]))
 print_stars()
 
 # joins
-print('", ".join(["a", "b", "c"]): {!r}'.format(", ".join([ "a", "b", "c"])))
+print('", ".join(["a", "b", "c"]): {!r}'.format(", ".join(["a", "b", "c"])))
 print_stars()
 
 # more info with help: help(str)
