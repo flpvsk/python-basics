@@ -16,7 +16,6 @@ ran = []
 
 
 def add_test(fn, *args):
-    global pending
     pending.append((fn, args))
 
 
@@ -54,6 +53,7 @@ def run():
     ran = len(ran)
     passed = len(passed)
     failed = len(failed)
+    pending = []
     return (ran, passed, failed)
 
 
@@ -61,4 +61,5 @@ add_test(assert_true, True)
 add_test(assert_true, False)
 add_test(assert_not_equal, 3, 3)
 add_test(assert_not_equal, 3, 3)
+print run()
 print pending_tests()
