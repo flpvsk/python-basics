@@ -39,6 +39,6 @@ class TestRunner(object):
 
     def clear_state(self):
         del self.pending_tests_list[:]
-        del self.selfrun_tests_list[:]
+        del self.run_tests_list[:]
         del self.failed_tests_list[:]
         del self.passed_tests_list[:]
