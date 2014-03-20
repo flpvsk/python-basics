@@ -1,65 +1,104 @@
 '''
 Created on Mar 13, 2014
- 
+
 @author: bessvla
 '''
 
-__all__ = ["add_test", "passed_tests", "pending_tests", "ran_tests", \
-           "failed_tests", "clear_state", "run"]
-
-from vladimir.autotest import assert_true, assert_not_equal
-
-pending = []
-passed = []
-failed = []
-ran = []
+__all__ = ['TestRunner']
 
 
-def add_test(fn, *args):
-    pending.append((fn, args))
+class TestRunner():
+    def __init__(self):
+        self.pending = []
+        self.passed = []
+        self.failed = []
+        self.ran = []
+
+    def add_test(self, fn):
+        self.pending.append((fn))
+
+    def passed_tests(self):
+        return self.passed
+
+    def pending_tests(self):
+        return self.pending
+
+    def ran_tests(self):
+        return self.ran
+
+    def failed_tests(self):
+        return self.failed
+
+    def clear_state(self):
+        self.pending, self.passed, self.failed, self.ran = [], [], [], []
+
+    def add_testclass(self, testclass):
+        '''        testmethods = [i for i in dir(testclass) if i.startswith('test_')]
+        set_up = [i for i in dir(testclass) if i == "set_up"]
+        tear_down = [i for i in dir(testclass) if i == "tear_down"]
+        for i in testmethods:
+            if set_up:
+                self.add_test(set_up[0])
+            self.add_test(i)
+            if tear_down:
+                self.add_test(tear_down[0])'''
+        self.pending.append((testclass))
+
+    def class_run(self, testclass):
+        testclass_instance = testclass()
+        testmethods = [i for i in dir(testclass_instance) if i.startswith('test_')]
+        for i in testmethods:
+            try:
+                testclass_instance.set_up()
+            except:
+                pass
+            try:
+                getattr(testclass_instance, i)()
+                self.passed.append(i)
+            except:
+                self.failed.append(i)
+            finally:
+                self.ran.append(i)
+                try:
+                    testclass_instance.tear_down()
+                except:
+                    pass
+        r = len(self.ran)
+        p = len(self.passed)
+        f = len(self.failed)
+        return (r, p, f)
+        
+    def run(self):
+        for i in self.pending_tests():
+            try:
+                i()
+                self.passed.append(i)
+            except:
+                self.failed.append(i)
+            finally:
+                self.ran.append(i)
+        r = len(self.ran)
+        p = len(self.passed)
+        f = len(self.failed)
+        del self.pending[:]
+        return (r, p, f)
 
 
-def passed_tests():
-    return passed
+class TodoTestCase(object):
 
+    def __init__(self):
+        print "initializing"
 
-def pending_tests():
-    return pending
+    def set_up(self):
+        print "set_UP"
 
+    def test_add_todo_adds_pending_item(self):
+        print "tEST1"
 
-def ran_tests():
-    return ran
+    def test_add_return_value(self):
+        print "Test2"
 
-
-def failed_tests():
-    return failed
-
-
-def clear_state():
-    global pending, passed, failed, ran
-    pending, passed, failed, ran = [], [], [], []
-
-
-def run():
-    global pending, passed, failed, ran
-    for i in pending_tests():
-        try:
-            i[0](*i[1])
-            passed.append(i)
-        except:
-            failed.append(i)
-        finally:
-            ran.append(i)
-    ran = len(ran)
-    passed = len(passed)
-    failed = len(failed)
-    pending = []
-    return (ran, passed, failed)
-
-
-add_test(assert_true, True)
-add_test(assert_true, False)
-add_test(assert_not_equal, 3, 3)
-add_test(assert_not_equal, 3, 3)
-print run()
-print pending_tests()
+testrunner = TestRunner()
+#testrunner.add_testclass(TodoTestCase)
+print testrunner.pending_tests()
+print testrunner.class_run(TodoTestCase)
