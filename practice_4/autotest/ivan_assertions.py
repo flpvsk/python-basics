@@ -3,82 +3,104 @@ Created on Mar 17, 2014
 
 @author: Java Student
 '''
+
+__all__=('assert_true','assert_not_equal')
  
- def assert_equal(a, b, message="assert_equal default message"):
-    assert a == b, "{0} {1} != {2}".format(message, a, b)
+def assert_equal(a, b):
+    if a == b:
+        print 'True because: \ra = %i\rb = %i' % (a , b)
+    else:
+        print 'False because: \ra = %i\rb = %i' % (a , b)
+        
+print 'assert_equal function tests: \n'
 
-#assert_equal(1, 2, "pass")
-assert_equal(5, 5)
+def assert_not_equal(a, b):
+    if a != b:
+        print 'True because: \ra = %i\rb = %i' % (a , b)
+    else:
+        print 'False because: \ra = %i\rb = %i' % (a , b)
+        
+print '\rassert_not_equal function tests: \n'
 
-def assert_not_equal(a, b, message="assert_not_equal dm"):
-    assert a != b, "{0} {1} == {2}".format(message, a, b)
+def assert_true(x):
+    if x == True:
+        print 'True because: \rx = %i' % (x)
+    else:
+        print 'False because: \rx = %i' % (x)
 
-assert_not_equal(1,"1")
-#assert_not_equal(5, 5)
+print '\rassert_true function tests: \n'
 
+def assert_false(x):
+    if x == False:
+        print 'True because: \rx = %i' % (x)
+    else:
+        print 'False because: \rx = %i' % (x)
 
-def assert_true(x, message="assert_true dm"):
-    assert x, "{0} {1} is False".format(message,x)
+print '\rassert_false function tests: \n'
+assert_false(1)
+assert_false(0)
 
-#assert_true(False)
-#assert_true(None)
-assert_true(1==1)
-#assert_true(1!=1, "ddd ")
-
-
-def assert_false(x, message="assert_false dm"):
-    assert not x, "{0} {1} is True".format(message, str(x))
-
-assert_false(False)
-assert_false(None)
-#assert_false(1==1, "some not deafault txt")
-assert_false(1!=1)
-
-def assert_is(a, b, message="assert_is dm"):
-    assert a is b, "{0} {1} is not {2}".format(message, str(a), str(b))
-
-#assert_is(1, 2, "fkfjfjfj")
-assert_is(1, 1)
-
-
-def assert_is_not(a, b, message="assert_is_not dm"):
-    assert a is not b, "{0} {1} is {2}".format(message, str(a), str(b))
-
-assert_is_not(1, 2)
-#assert_is_not(1, 1, "fff")
+def assert_is(a, b):
+    if a is b:
+        print 'True because: \ra = %i\rb = %i' % (a , b)
+    else:
+        print 'False because: \ra = %i\rb = %i' % (a , b)
+        
+print '\rassert_is function tests: \n'
+assert_is(3, 5)
+assert_is(4, 4)
 
 
-def assert_is_none(x, message="assert_is_none dm"):
-    assert x is None, "{1} {0} is not None".format(str(x), message)
+def assert_is_not(a, b):
+    if a is not b:
+        print 'True because: \ra = %i\rb = %i' % (a , b)
+    else:
+        print 'False because: \ra = %i\rb = %i' % (a , b)
+        
+print '\rassert_is_not function tests: \n'
+assert_is_not(3, 5)
+assert_is_not(4, 4)
 
-#assert_is_none(1, "some txt")
-#assert_is_none(1)
+def assert_is_none(x):
+    if x is None:
+        print 'True because: \rx = %s\r' % (x)
+    else:
+        print 'False because: \rx = %i' % (x)
+        
+print '\rassert_is_none function tests: \n'
 assert_is_none(None)
+assert_is_none(1)
 
-def assert_is_not_none(x, message="assert_is_not_none dm"):
-    assert x is not None, "{1} {0} is None".format(str(x), message)
+def assert_is_not_none(x):
+    if x is not None:
+        print 'True because: \rx = %i\r' % (x)
+    else:
+        print 'False because: \rx = %s' % (x)
+        
+print '\rassert_is_not_none function tests: \n'
+assert_is_not_none(None)
+assert_is_not_none(1)
 
-assert_is_not_none(1, "dd")
-#assert_is_not_none(None, "ff")
+def assert_in(a, b):
+    if a in b:
+        print 'True because: \ra = %i\rb = %s' % (a , b)
+    else:
+        print 'False because: \ra = %i\rb = %s' % (a , b)
+        
+print '\rassert_in function tests: \n'
+lst1 = [1, 2, 3, 4, 5]
+lst2 = [3, 6, 8, 0]
+assert_in(3, lst1)
+assert_in(5, lst2)
 
-
-def assert_in(a, b, message="assert_in dm"):
-    assert a in b, "{2} {0} is not in {1}".format(str(a), str(b), message)
-
-assert_in(1, range(5))
-assert_in("a", "actually")
-#assert_in("b", "actually", "gjgjgj")
-
-
-def assert_not_in(a=None, b=[]):
-    try:
-        assert a not in b, "{0} is in {1}".format(str(a), str(b))
-    except AssertionError as er:
-        print("An error occurred: " + er.message)
-
-print("assert_not_in")
-assert_not_in(1, range(5))
-assert_not_in("a", "actually")
-assert_not_in("b", "actually")
-assert_not_in("aa")
-assert_not_in()
+def assert_not_in(a, b):
+    if a not in b:
+        print 'True because: \ra = %i\rb = %s' % (a , b)
+    else:
+        print 'False because: \ra = %i\rb = %s' % (a , b)
+        
+print '\rassert_not_in function tests: \n'
+lst1 = [1, 2, 3, 4, 5]
+lst2 = [3, 6, 8, 0]
+assert_not_in(3, lst1)
+assert_not_in(5, lst2)
