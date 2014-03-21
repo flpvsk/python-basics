@@ -1,3 +1,7 @@
+import traceback
+from TestResult import TestResult
+
+
 class TestRunner(object):
 
     def __init__(self):
@@ -17,6 +21,7 @@ class TestRunner(object):
     def run(self):
         while len(self.pending_tests_list) != 0:
             test = self.pending_tests_list[0]
+            test_result = None
             try:
                 if self.tests_set_up is not None:
                     self.__run_test_set_up()
@@ -25,27 +30,27 @@ class TestRunner(object):
                 if self.tests_tear_down is not None:
                     self.__run_test_tear_down()
                     self.tests_tear_down = None
-            except BaseException as e:
-                print("Test '{}' failed - Exception caught: {}"
-                      .format(test.__name__, e.message))
-                self.failed_tests_list.append(test)
+            except BaseException:
+                test_result = TestResult(test, "Failed",
+                                         traceback.format_exc())
+                self.failed_tests_list.append(test_result)
             else:
-                self.passed_tests_list.append(test)
-                print "Test '{}' passed".format(test.__name__)
+                test_result = TestResult(test, "Passed")
+                self.passed_tests_list.append(test_result)
             finally:
-                self.run_tests_list.append(test)
+                self.run_tests_list.append(test_result)
                 self.pending_tests_list.remove(test)
         return (len(self.run_tests_list), len(self.passed_tests_list),
                 len(self.failed_tests_list))
 
     def run_tests(self):
-        return [t.__name__ for t in self.run_tests_list]
+        return self.run_tests_list
 
     def passed_tests(self):
-        return [t.__name__ for t in self.passed_tests_list]
+        return self.passed_tests_list
 
     def failed_tests(self):
-        return [t.__name__ for t in self.failed_tests_list]
+        return self.failed_tests_list
 
     def set_tests_set_up(self, tests_set_up):
         self.tests_set_up = tests_set_up

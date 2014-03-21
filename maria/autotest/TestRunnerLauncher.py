@@ -39,6 +39,8 @@ class TestRunnerLauncher(object):
             testRunner.set_tests_tear_down(tests[2])
             [testRunner.add_test(test) for test in tests[0]]
             testRunner.run()
+            for test_run_result in testRunner.run_tests():
+                print test_run_result
             if len(testRunner.failed_tests()) != 0:
                 sys.exit(1)
             else:
