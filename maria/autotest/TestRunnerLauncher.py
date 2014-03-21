@@ -13,10 +13,10 @@ class TestRunnerLauncher(object):
     SET_UP_METHOD_NAME = "set_up"
     TEAR_DOWN_METHOD_NAME = "tear_down"
     TEST_FUNCTIONS_CONTAINER_TYPE_NAME = "module_functions"
-    CLASSES_TEST_CONTAINER_TYPE_NAME = "class"
+    CLASS_TEST_CONTAINER_TYPE_NAME = "class"
 
     def __init__(self, test_module_name, test_container_type):
-        '''Specifies test runner launches
+        '''Specifies test runner launcher
 
         :param test_module_name: name of module with tests
         :param test_container_type: test container type (class or functions)
@@ -26,18 +26,18 @@ class TestRunnerLauncher(object):
         self.test_extractors_dict = \
                 {self.TEST_FUNCTIONS_CONTAINER_TYPE_NAME:
                  self.__extract_tests_from_module_functions,
-                 self.CLASSES_TEST_CONTAINER_TYPE_NAME:
+                 self.CLASS_TEST_CONTAINER_TYPE_NAME:
                  self.__extract_tests_from_classes}
 
     def execute_tests(self):
         '''Runs test runner for specified tests'''
         all_tests = self.test_extractors_dict[self.test_container_type]()
-        for class_tests in all_tests:
+        for tests in all_tests:
             testRunner = TestRunner()
             testRunner.clear_state()
-            testRunner.set_tests_set_up(class_tests[1])
-            testRunner.set_tests_tear_down(class_tests[2])
-            [testRunner.add_test(class_test) for class_test in class_tests[0]]
+            testRunner.set_tests_set_up(tests[1])
+            testRunner.set_tests_tear_down(tests[2])
+            [testRunner.add_test(test) for test in tests[0]]
             testRunner.run()
             if len(testRunner.failed_tests()) != 0:
                 sys.exit(1)
@@ -52,8 +52,8 @@ class TestRunnerLauncher(object):
         As there is no setup and teardown functions for module test functions,
         None is returned
         '''
-        return ([getattr(self.test_module, f) for f in dir(self.test_module)
-                 if f in self.test_module.__all__], None, None)
+        return [([getattr(self.test_module, f) for f in dir(self.test_module)
+                 if f in self.test_module.__all__], None, None)]
 
     def __extract_tests_from_classes(self):
         '''Returns list of tuples with tests from classes.
