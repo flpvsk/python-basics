@@ -36,10 +36,11 @@ def test6():
 
 def test7():
     clear()
-    i = add('Sandwich')
-    assert status_by_text(i) == PENDING, "tets 6 failed"
-    mark_completed_by_index(i)
-    assert status_by_text(i) == COMPLETED, "test 6 failed"    
+    txt = 'Sandwich'
+    add(txt)
+    assert status_by_text(txt) == PENDING, "tets 6 failed"
+    mark_completed_by_text(txt)
+    assert status_by_text(txt) == COMPLETED, "test 6 failed"    
 
 test1()
 tets2()
