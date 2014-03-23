@@ -1,4 +1,7 @@
-__all__ = ("test_assert_equal", "test_assert_not_equal", "test_assert_is_none")
+__all__ = ("test_assert_equal", "test_assert_not_equal",
+           "test_assert_is_none", "assert_equal",
+            "assert_not_equal", "assert_is_none")
+
 def assert_equal(a, b, message="assert_equal default message"):
     assert a == b, "{0} {1} != {2}".format(message, a, b)
 

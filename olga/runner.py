@@ -1,33 +1,37 @@
-#from assertions import test_assert_equal, test_assert_not_equal, test_assert_is_none
-import assertions
+from assertions import *
+import sys
+#import assertions
+
 class runner():
     tests = {}
     
     def add_test(self, fn):
-        self.tests[fn.__name__] = "pending"
+        self.tests[fn.__name__] = "pending", fn
         
     def pending_tests(self):
         return [x for x in self.tests if self.tests[x] == "pending"]
     
     def run(self):
         for x in self.tests:
-            if self.tests[x] == "pending":
+            if self.tests[x][0] == "pending":
                 try:
-                    test = getattr(assertions, x)
+                    #test = getattr(sys.modules[__name__], x)
+                    #test()
+                    test = self.tests[x][1]
                     test()
-                    self.tests[x] = "passed"
+                    self.tests[x] = "passed", test
                 except:
-                    self.tests[x] = "failed"
-            
-    
+                    self.tests[x] = "failed", test
+
+
     def ran_tests(self):
-        return [x for x in self.tests if (self.tests[x] == "passed" or self.tests[x] == "failed")]
+        return [x for x in self.tests if (self.tests[x][0] == "passed" or self.tests[x][0] == "failed")]
     
     def passed_tests(self):
-        return [x for x in self.tests if self.tests[x] == "passed"]
+        return [x for x in self.tests if self.tests[x][0] == "passed"]
     
     def failed_tests(self):
-        return [x for x in self.tests if self.tests[x] == "failed"]
+        return [x for x in self.tests if self.tests[x][0] == "failed"]
     
     def clear_state(self):
         self.tests = {}
@@ -35,13 +39,13 @@ class runner():
 
 if __name__ == "__main__":
     my_runner = runner()
-    my_runner.add_test(assertions.test_assert_equal)
+    my_runner.add_test(test_assert_equal)
     print my_runner.tests
     
-    my_runner.add_test(assertions.test_assert_is_none)
+    my_runner.add_test(test_assert_is_none)
     print my_runner.tests
     
-    my_runner.add_test(assertions.test_assert_not_equal)
+    my_runner.add_test(test_assert_not_equal)
     print my_runner.tests
     
     my_runner.run()
