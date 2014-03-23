@@ -1,27 +1,23 @@
 from assertions import *
-import sys
-#import assertions
 
 class runner():
     tests = {}
     
     def add_test(self, fn):
-        self.tests[fn.__name__] = "pending", fn
+        self.tests[fn.__name__] = ["pending", fn]
         
     def pending_tests(self):
-        return [x for x in self.tests if self.tests[x] == "pending"]
+        return [x for x in self.tests if self.tests[x][0] == "pending"]
     
     def run(self):
         for x in self.tests:
             if self.tests[x][0] == "pending":
                 try:
-                    #test = getattr(sys.modules[__name__], x)
-                    #test()
                     test = self.tests[x][1]
                     test()
-                    self.tests[x] = "passed", test
+                    self.tests[x] = ["passed", test]
                 except:
-                    self.tests[x] = "failed", test
+                    self.tests[x] = ["failed", test]
 
 
     def ran_tests(self):
