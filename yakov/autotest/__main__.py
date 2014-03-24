@@ -5,7 +5,10 @@ Created on Mar 20, 2014
 '''
 import sys
 import importlib
-import runner as run
+from yakov.autotest import TestRunner
+from examples_5.yakov_todo_test_class import TodoTestCases
+
+run = TestRunner(TodoTestCases)
 
 
 def path_to_module(path):
@@ -28,14 +31,16 @@ tm = importlib.import_module(path_to_module(sys.argv[1]))
 
 def prepare_tests_to_run():
     run.clear_state()
-    for t in tm.__all__:
-        run.add_test(getattr(tm, t))
+    #for t in tm.__all__:
+        #run.add_test(getattr(tm, t))
+    run.add_tests_from_class()
     #print run.pending_tests()
 
 
 def execute_tests():
     run.run()
     return len(run.failed_tests())
+
 
 prepare_tests_to_run()
 print execute_tests()

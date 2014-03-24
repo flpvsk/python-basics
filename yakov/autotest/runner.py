@@ -4,49 +4,48 @@ Created on Mar 13, 2014
 @author: Java Student
 '''
 
-__all__ = ['add_test', 'pending_tests', 'run', 'ran_tests', 'passed_tests',
-           'failed_tests', 'clear_state']
 
-PENDING = "pending"
-PASSED = "passed"
-FAILED = "failed"
+class TestRunner():
+    # key: test
+    # value: None-pending, 0-passed, 1-failed
+    def __init__(self, TestClass=None):
+        self._tests = dict()
+        if TestClass != None:
+            self._TestClass = TestClass()
+        self._PENDING = "pending"
+        self._PASSED = "passed"
+        self._FAILED = "failed"
 
-# key: test
-# value: None-pending, 0-passed, 1-failed
-tests = dict()
+    # Test as a function
+    def add_test(self, fn):
+        self._tests[fn] = self._PENDING
 
+    # Tests as class methods
+    def add_tests_from_class(self):
+        self._tests = {tst:self._PENDING for tst in dir(self._TestClass) if tst.find('test') == 0}
 
-def add_test(fn):
-    tests[fn] = PENDING
+    def pending_tests(self):
+        return [func for func in self._tests.keys() if self._tests[func] == self._PENDING]
 
+    def run(self):
+        to_run = self.pending_tests()
+        for tst in to_run:
+            try:
+                tst()
+            except:
+                self._tests[tst] = self._FAILED
+            else:
+                self._tests[tst] = self._PASSED
+        return (len(self.ran_tests()), len(self.passed_tests()), len(self.failed_tests()))
 
-def pending_tests():
-    return [func for func in tests.keys() if tests[func] == PENDING]
+    def ran_tests(self):
+        return [func for func in self._tests.keys() if self._tests[func] != self._PENDING]
 
+    def passed_tests(self):
+        return [func for func in self._tests.keys() if self._tests[func] == self._PASSED]
 
-def run():
-    to_run = pending_tests()
-    for tst in to_run:
-        try:
-            tst()
-        except:
-            tests[tst] = FAILED
-        else:
-            tests[tst] = PASSED
-    return (len(ran_tests()), len(passed_tests()), len(failed_tests()))
+    def failed_tests(self):
+        return [func for func in self._tests.keys() if self._tests[func] == self._FAILED]
 
-
-def ran_tests():
-    return [func for func in tests.keys() if tests[func] != PENDING]
-
-
-def passed_tests():
-    return [func for func in tests.keys() if tests[func] == PASSED]
-
-
-def failed_tests():
-    return [func for func in tests.keys() if tests[func] == FAILED]
-
-
-def clear_state():
-    tests.clear()
+    def clear_state(self):
+        self._tests.clear()
