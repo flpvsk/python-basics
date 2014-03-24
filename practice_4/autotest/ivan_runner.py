@@ -41,8 +41,7 @@ def run():
 
 
 def run_tests():
-    for i in run_test_list:
-        return i
+        return (run_test_list)
 
 
 def passed_tests():
