@@ -20,6 +20,12 @@ class TodoTestCase(object):
         items = self._todo.items()
         assert_equal(("Sandwich", Todo.PENDING), items)
     
+    def test_add_todo_adds_pending_item2(self):
+        self._todo.add("Sand")
+
+        items = self._todo.items()
+        assert_equal((("Sand", Todo.PENDING),), items)
+    
     def tear_down(self):
         print("tear_down")
 

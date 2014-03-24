@@ -7,22 +7,18 @@ class runner():
     PENDING = "pending"
     FAILED = "failed"
     PASSED = "passed"
+    set_up = None
+    tear_down = None
     
     def __init__(self):
         test_case = TodoTestCase()
         self.tests = {m: [self.PENDING, getattr(test_case, m)] for m in dir(test_case) if m.startswith("test_")}
-
-    
-    def set_up(self):
-        for m in dir(self.test_case):
+        for m in dir(test_case):
             if  m == "set_up":
-                getattr(self.test_case, m)
-
-    def tear_drop(self):
-        for m in dir(self.test_case):
-            if m == "tear_drop":
-                getattr(self.test_case, m)
-
+                self.set_up = getattr(test_case, m)
+            elif m == "tear_down":
+                self.tear_down = getattr(test_case, m)
+                
     def add_test(self, fn):
         self.tests  [fn.__name__] = self.PENDING, fn
         
@@ -34,9 +30,9 @@ class runner():
             if self.tests[x][0] == self.PENDING:
                 test = self.tests[x][1]
                 try:
-                    #self.set_up()
+                    self.set_up()
                     test()
-                    #self.tear_drop()
+                    self.tear_down()
                     self.tests[x] = self.PASSED, test
                 except:
                     self.tests[x] = self.FAILED, test
