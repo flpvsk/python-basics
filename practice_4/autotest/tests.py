@@ -5,6 +5,7 @@ Created on Mar 20, 2014
 '''
 __all__ = ('test_that_fails', 'test_function_attribute_name')
 
+
 from ivan_assertions import *
 
 
