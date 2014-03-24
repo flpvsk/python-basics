@@ -2,7 +2,7 @@ import traceback
 from TestResult import TestResult
 
 
-class TestRunner(object):
+class TestRunnerBase(object):
 
     def __init__(self):
         self.pending_tests_list = []
@@ -26,20 +26,24 @@ class TestRunner(object):
                 if self.tests_set_up is not None:
                     self.__run_test_set_up()
                     self.tests_set_up = None
+                self.report_test_started(test)
                 test()
                 if self.tests_tear_down is not None:
                     self.__run_test_tear_down()
                     self.tests_tear_down = None
             except BaseException:
-                test_result = TestResult(test, "Failed",
+                test_result = TestResult(test, TestResult.FAILED_TEST_RESULT, 
                                          traceback.format_exc())
                 self.failed_tests_list.append(test_result)
             else:
-                test_result = TestResult(test, "Passed")
+                test_result = TestResult(test, TestResult.PASSED_TEST_RESULT)
                 self.passed_tests_list.append(test_result)
             finally:
                 self.run_tests_list.append(test_result)
                 self.pending_tests_list.remove(test)
+                self.report_test_finished(test_result)
+        self.report_all_finished(self.run_tests_list, 
+                                 self.passed_tests_list, self.failed_tests_list)
         return (len(self.run_tests_list), len(self.passed_tests_list),
                 len(self.failed_tests_list))
 
@@ -65,6 +69,14 @@ class TestRunner(object):
         del self.passed_tests_list[:]
         self.tests_set_up = None
         self.tests_tear_down = None
+        
+    def report_all_finished(self, run_tests_list, passed_tests_list, 
+                            failed_tests_list):
+        print "Count of run tests: {}".format(len(run_tests_list))
+        print "Count of passed tests: {}".format(
+                                            len(passed_tests_list))
+        print "Count of failed tests: {}".format(
+                                            len(failed_tests_list))
 
     def __run_test_set_up(self):
         try:
@@ -85,3 +97,4 @@ class TestRunner(object):
         else:
             print "Test environment cleaned - '{}' executed".format(
                                             self.tests_tear_down.__name__)
+            

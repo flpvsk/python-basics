@@ -5,7 +5,8 @@ Extracts all tests from specified source and launch testRunner for them
 
 import importlib
 import sys
-from TestRunner import TestRunner
+from TestRunnerVerboseReporting import TestRunnerVerboseReporting
+from TestRunnerFailReporting import TestRunnerFailReporting
 
 
 class TestRunnerLauncher(object):
@@ -14,8 +15,16 @@ class TestRunnerLauncher(object):
     TEAR_DOWN_METHOD_NAME = "tear_down"
     TEST_FUNCTIONS_CONTAINER_TYPE_NAME = "module_functions"
     CLASS_TEST_CONTAINER_TYPE_NAME = "class"
+    VERBOSE_REPORTING_TYPE_NAME = "verbose"
+    FAIL_REPORTING_TYPE_NAME = "fail"
+    
+    test_runners_dict = {VERBOSE_REPORTING_TYPE_NAME:
+                            TestRunnerVerboseReporting,
+                            FAIL_REPORTING_TYPE_NAME:
+                            TestRunnerFailReporting}
 
-    def __init__(self, test_module_name, test_container_type):
+    def __init__(self, test_module_name, test_container_type, 
+                 test_reporting_name=FAIL_REPORTING_TYPE_NAME):
         '''Specifies test runner launcher
 
         :param test_module_name: name of module with tests
@@ -23,6 +32,7 @@ class TestRunnerLauncher(object):
         '''
         self.test_module = importlib.import_module(test_module_name)
         self.test_container_type = test_container_type
+        self.test_runner = self.test_runners_dict[test_reporting_name]()
         self.test_extractors_dict = \
                 {self.TEST_FUNCTIONS_CONTAINER_TYPE_NAME:
                  self.__extract_tests_from_module_functions,
@@ -33,15 +43,12 @@ class TestRunnerLauncher(object):
         '''Runs test runner for specified tests'''
         all_tests = self.test_extractors_dict[self.test_container_type]()
         for tests in all_tests:
-            testRunner = TestRunner()
-            testRunner.clear_state()
-            testRunner.set_tests_set_up(tests[1])
-            testRunner.set_tests_tear_down(tests[2])
-            [testRunner.add_test(test) for test in tests[0]]
-            testRunner.run()
-            for test_run_result in testRunner.run_tests():
-                print test_run_result
-            if len(testRunner.failed_tests()) != 0:
+            self.test_runner.clear_state()
+            self.test_runner.set_tests_set_up(tests[1])
+            self.test_runner.set_tests_tear_down(tests[2])
+            [self.test_runner.add_test(test) for test in tests[0]]
+            self.test_runner.run()
+            if len(self.test_runner.failed_tests()) != 0:
                 sys.exit(1)
             else:
                 sys.exit(0)
