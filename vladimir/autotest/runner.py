@@ -98,6 +98,9 @@ class TodoTestCase(object):
     def test_add_return_value(self):
         print "Test2"
 
+    def tear_down(self):
+        print "teardown"
+
 testrunner = TestRunner()
 #testrunner.add_testclass(TodoTestCase)
 print testrunner.pending_tests()
