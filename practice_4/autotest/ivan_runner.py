@@ -56,10 +56,15 @@ def failed_tests():
 
 
 def clear_state():
-    pending_test_list = []
-    failed_test_list = []
-    run_test_list = []
-    passed_test_list = []
+    global pending_test_list
+    global failed_test_list
+    global run_test_list
+    global passed_test_list
+
+    del pending_test_list
+    del failed_test_list
+    del run_test_list
+    del passed_test_list
 
 if __name__ == '__main__':
     add_test(test_that_fails)
