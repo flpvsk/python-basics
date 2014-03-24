@@ -1,6 +1,4 @@
-from assertions import *
 from examples_5.todo_tests import *
-import re
 
 class runner():
     tests = {}
