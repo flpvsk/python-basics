@@ -23,7 +23,7 @@ def path_to_module(path):
 
 tm = importlib.import_module(path_to_module(sys.argv[1]))
 
-print "Tests are in module: " + tm.__name__
+#print "Tests are in module: " + tm.__name__
 
 
 def prepare_tests_to_run():
