@@ -1,19 +1,16 @@
 import sys
-import importlib
-from runner import clear_state
-from runner import add_test
-from runner import run
-from runner import failed_tests
+from TestRunnerLauncher import TestRunnerLauncher
 
 if __name__ == '__main__':
-    package_name = sys.argv[1]
-    module = importlib.import_module(package_name)
-    test_functions = [f for f in dir(module) if f in module.__all__]
-    for func in test_functions:
-        clear_state()
-        add_test(getattr(module, func))
-        run()
-        if len(failed_tests()) != 0:
-            sys.exit(1)
-        else:
-            sys.exit(0)
+    if(len(sys.argv) != 3):
+        error_message = "2 arguments are required: test module name and \
+type of tests. If you want to launch tests from module functions - enter '{}',\
+if from classes - enter '{}'. E.g.- 'my.test.module {}'"\
+        .format(TestRunnerLauncher.TEST_FUNCTIONS_CONTAINER_TYPE_NAME,
+               TestRunnerLauncher.CLASS_TEST_CONTAINER_TYPE_NAME,
+               TestRunnerLauncher.CLASS_TEST_CONTAINER_TYPE_NAME)
+        raise ValueError(error_message)
+    module_name = sys.argv[1]
+    test_container_type = sys.argv[2]
+    test_runner_launcher = TestRunnerLauncher(module_name, test_container_type)
+    test_runner_launcher.execute_tests()
