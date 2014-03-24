@@ -7,7 +7,9 @@ import importlib
 import sys
 from TestRunnerVerboseReporting import TestRunnerVerboseReporting
 from TestRunnerFailReporting import TestRunnerFailReporting
-
+from FailReporter import FailReporter
+from VerboseReporter import VerboseReporter
+from TestRunnerReporter import TestRunnerReporter
 
 class TestRunnerLauncher(object):
     TEST_METHOD_PREFIX = "test_"
@@ -17,11 +19,17 @@ class TestRunnerLauncher(object):
     CLASS_TEST_CONTAINER_TYPE_NAME = "class"
     VERBOSE_REPORTING_TYPE_NAME = "verbose"
     FAIL_REPORTING_TYPE_NAME = "fail"
+    VERBOSE_REPORTER_TYPE_NAME = "verbose_reporter"
+    FAIL_REPORTER_TYPE_NAME = "fail_reporter"
     
     test_runners_dict = {VERBOSE_REPORTING_TYPE_NAME:
-                            TestRunnerVerboseReporting,
-                            FAIL_REPORTING_TYPE_NAME:
-                            TestRunnerFailReporting}
+                        TestRunnerVerboseReporting,
+                        FAIL_REPORTING_TYPE_NAME:
+                        TestRunnerFailReporting,
+                        VERBOSE_REPORTER_TYPE_NAME:
+                        VerboseReporter,
+                        FAIL_REPORTER_TYPE_NAME:
+                        FailReporter}
 
     def __init__(self, test_module_name, test_container_type, 
                  test_reporting_name=FAIL_REPORTING_TYPE_NAME):
@@ -29,10 +37,16 @@ class TestRunnerLauncher(object):
 
         :param test_module_name: name of module with tests
         :param test_container_type: test container type (class or functions)
+        :param test_reporting_name: optional, reporting type (4 are available)
         '''
         self.test_module = importlib.import_module(test_module_name)
         self.test_container_type = test_container_type
-        self.test_runner = self.test_runners_dict[test_reporting_name]()
+        if test_reporting_name == self.VERBOSE_REPORTER_TYPE_NAME or \
+               test_reporting_name == self.FAIL_REPORTER_TYPE_NAME:
+            self.test_runner = TestRunnerReporter(
+                            self.test_runners_dict[test_reporting_name]())
+        else:
+            self.test_runner = self.test_runners_dict[test_reporting_name]()
         self.test_extractors_dict = \
                 {self.TEST_FUNCTIONS_CONTAINER_TYPE_NAME:
                  self.__extract_tests_from_module_functions,
