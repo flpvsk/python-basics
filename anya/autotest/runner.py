@@ -15,8 +15,10 @@ def fn():
 
 
 class TestRunner():
+    _PASSED = 'Passed'
+    _FAILED = 'Failed'
+    _NOT_RUN = 'NotRun'
     def __init__(self):
-        self.tests_dict = {'test1': 'Passed', 'test3': 'Failed'}
         self.pending_lst=[] 
         self.run_lst=[] 
         self.failed_lst=[] 
@@ -24,13 +26,10 @@ class TestRunner():
 
 
     def add_test(self,fn): 
-        self.tests_dict[fn.__name__]='NotRun' 
+        self.pending_lst.append(fn)
          
          
-    
-    
     def pending_tests(self): 
-        self.pending_lst=[key for key in self.tests_dict.keys() if self.tests_dict.get(key) == 'NotRun'] 
         return self.pending_lst 
     
 
@@ -60,28 +59,26 @@ class TestRunner():
     def run(self, pending_lst): 
         for test in self.pending_lst: 
             try: 
-                getattr(sys.modules[__name__], test)() 
-                self.passed_lst.append(test) 
-                self.tests_dict[test]='Passed' 
+                test
+                self.passed_lst.append(test.__name__) 
             except AssertionError: 
-                self.failed_lst.append(test) 
-                self.tests_dict[test]='Failed' 
+                self.failed_lst.append(test.__name__) 
             finally: 
-                self.run_lst.append(test) 
+                self.run_lst.append(test.__name__) 
                 self.pending_lst.remove(test) 
         return (len(self.run_lst), len(self.passed_lst), len(self.failed_lst)) 
     
     
     def run_tests(self): 
-        return [key for key in self.tests_dict.keys() if self.tests_dict.get(key) == 'Passed' or self.tests_dict.get(key) == 'Failed'] 
+        return self.run_lst
     
     
     def passed_tests(self): 
-        return [key for key in self.tests_dict.keys() if self.tests_dict.get(key) == 'Passed'] 
+        return self.passed_lst
     
     
     def failed_tests(self): 
-        return [key for key in self.tests_dict.keys() if self.tests_dict.get(key) == 'Failed'] 
+        return self.failed_lst 
 
     def clear_state(self):
         self.pending_lst, self.passed_lst, self.failed_lst, self.run_lst = [], [], [], []
@@ -89,7 +86,6 @@ class TestRunner():
         
 class TestRunnerBase():
     def __init__(self):
-        self.tests_dict = {'test1': 'Passed', 'test3': 'Failed'}
         self.pending_lst=[] 
         self.run_lst=[] 
         self.failed_lst=[] 
@@ -97,11 +93,10 @@ class TestRunnerBase():
 
 
     def add_test(self,fn): 
-        self.tests_dict[fn.__name__]='NotRun' 
-
-
+        self.pending_lst.append(fn)
+         
+         
     def pending_tests(self): 
-        self.pending_lst=[key for key in self.tests_dict.keys() if self.tests_dict.get(key) == 'NotRun'] 
         return self.pending_lst 
 
 
@@ -112,9 +107,9 @@ class TestRunnerBase():
             self.report_test_started(i)
             try:
                 test_case_instance.set_up()
+                
             except:
-                self.failed_lst.append(i)
-                self.report_test_failed(i)
+                pass
             try:
                 getattr(test_case_instance, i)()
                 self.passed_lst.append(i)
@@ -147,15 +142,15 @@ class TestRunnerBase():
         return (len(self.run_lst), len(self.passed_lst), len(self.failed_lst)) 
     
     def run_tests(self): 
-        return [key for key in self.tests_dict.keys() if self.tests_dict.get(key) == 'Passed' or self.tests_dict.get(key) == 'Failed'] 
-
-
+        return self.run_lst
+    
+    
     def passed_tests(self): 
-        return [key for key in self.tests_dict.keys() if self.tests_dict.get(key) == 'Passed'] 
+        return self.passed_lst
     
     
     def failed_tests(self): 
-        return [key for key in self.tests_dict.keys() if self.tests_dict.get(key) == 'Failed'] 
+        return self.failed_lst 
 
     def clear_state(self):
         self.pending_lst, self.passed_lst, self.failed_lst, self.run_lst = [], [], [], []
@@ -184,7 +179,7 @@ class TestRunnerVerboseReporting(TestRunnerBase):
     
     
     def report_test_started(self, test):
-        print 'Starting' test
+        print 'Starting'
     '''
     def report_test_finished(self):
         pass
