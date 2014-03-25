@@ -1,16 +1,15 @@
 import traceback
 from TestResult import TestResult
+from utils import noop
 
 
 class TestRunnerBase(object):
 
     def __init__(self):
+        self.test_results_list = []
         self.pending_tests_list = []
-        self.run_tests_list = []
-        self.failed_tests_list = []
-        self.passed_tests_list = []
-        self.tests_set_up = None
-        self.tests_tear_down = None
+        self.tests_tear_down = noop
+        self.tests_set_up = noop
 
     def add_test(self, fn):
         self.pending_tests_list.append(fn)
@@ -19,42 +18,38 @@ class TestRunnerBase(object):
         return [t.__name__ for t in self.pending_tests_list]
 
     def run(self):
-        while len(self.pending_tests_list) != 0:
+        while self.pending_tests_list:
             test = self.pending_tests_list[0]
             test_result = None
             try:
-                if self.tests_set_up is not None:
-                    self.__run_test_set_up()
-                    self.tests_set_up = None
+                self.__run_test_set_up()
                 self.report_test_started(test)
                 test()
-                if self.tests_tear_down is not None:
-                    self.__run_test_tear_down()
-                    self.tests_tear_down = None
+                self.__run_test_tear_down()
             except BaseException:
-                test_result = TestResult(test, TestResult.FAILED_TEST_RESULT, 
+                test_result = TestResult(test, TestResult.FAILED_TEST_RESULT,
                                          traceback.format_exc())
-                self.failed_tests_list.append(test_result)
             else:
                 test_result = TestResult(test, TestResult.PASSED_TEST_RESULT)
-                self.passed_tests_list.append(test_result)
             finally:
-                self.run_tests_list.append(test_result)
+                self.test_results_list.append(test_result)
                 self.pending_tests_list.remove(test)
                 self.report_test_finished(test_result)
-        self.report_all_finished(self.run_tests_list, 
-                                 self.passed_tests_list, self.failed_tests_list)
-        return (len(self.run_tests_list), len(self.passed_tests_list),
-                len(self.failed_tests_list))
+        self.report_all_finished(self.run_tests(),
+                                self.passed_tests(), self.failed_tests())
+        return (len(self.run_tests()), len(self.passed_tests()),
+                len(self.failed_tests()))
 
     def run_tests(self):
-        return self.run_tests_list
+        return self.test_results_list
 
     def passed_tests(self):
-        return self.passed_tests_list
+        return [test_result for test_result in self.test_results_list if
+            test_result.test_result_status == test_result.PASSED_TEST_RESULT]
 
     def failed_tests(self):
-        return self.failed_tests_list
+        return [test_result for test_result in self.test_results_list if
+            test_result.test_result_status == test_result.FAILED_TEST_RESULT]
 
     def set_tests_set_up(self, tests_set_up):
         self.tests_set_up = tests_set_up
@@ -64,13 +59,11 @@ class TestRunnerBase(object):
 
     def clear_state(self):
         del self.pending_tests_list[:]
-        del self.run_tests_list[:]
-        del self.failed_tests_list[:]
-        del self.passed_tests_list[:]
-        self.tests_set_up = None
-        self.tests_tear_down = None
-        
-    def report_all_finished(self, run_tests_list, passed_tests_list, 
+        del self.test_results_list[:]
+        self.tests_set_up = noop
+        self.tests_tear_down = noop
+
+    def report_all_finished(self, run_tests_list, passed_tests_list,
                             failed_tests_list):
         print "Count of run tests: {}".format(len(run_tests_list))
         print "Count of passed tests: {}".format(
@@ -81,20 +74,13 @@ class TestRunnerBase(object):
     def __run_test_set_up(self):
         try:
             self.tests_set_up()
-        except BaseException as e:
+        except:
             print "Failed to set up tests"
-            raise e
-        else:
-            print "Test environment prepared - '{}' executed".format(
-                                            self.tests_set_up.__name__)
+            raise
 
     def __run_test_tear_down(self):
         try:
             self.tests_tear_down()
-        except BaseException as e:
+        except:
             print "Failed to tear down tests"
-            raise e
-        else:
-            print "Test environment cleaned - '{}' executed".format(
-                                            self.tests_tear_down.__name__)
-            
+            raise
