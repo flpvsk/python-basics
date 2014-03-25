@@ -44,20 +44,18 @@ class TestRunner():
         testmethods = [i for i in dir(test_case_instance) if i.startswith('test_')]
         for i in testmethods:
             test = getattr(test_case_instance, i)
-            test_result = TestResult(test)
             try:
                 test_case_instance.set_up()
             except:
                 pass
             try:
                 test()
-                test_result._TESTRESULT = _PASSED
+                test_result = TestResult(test, TestRunner._PASSED)
                 test_result_lst = [test_result._TESTNAME, test_result._TESTRESULT, test_result._STACKTRACE]
                 self.passed_lst.append(test_result_lst)
             except:
-                test_result._TESTRESULT = _FAILED
-                test_result._STACKTRACE = traceback.format_exc()
-                test_result_lst = [test_result._TESTNAME, test_result._TESTRESULT, test_result._STACKTRACE]
+                test_result = TestResult(test, TestRunner._FAILED, traceback.format_exc())
+                test_result_lst = [test_result._TESTNAME, test_result._TESTRESULT,]
                 self.failed_lst.append(test_result_lst)
             finally:
                 self.run_lst.append(i)
