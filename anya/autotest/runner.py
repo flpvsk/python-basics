@@ -4,7 +4,9 @@ Created on Mar 21, 2014
 @author: arakann 
 ''' 
 
-import sys 
+import sys
+import traceback
+from TestResult import TestResult
 
 
 __all__ = ['TestRunner']
@@ -15,9 +17,13 @@ def fn():
 
 
 class TestRunner():
+    
+    
     _PASSED = 'Passed'
     _FAILED = 'Failed'
     _NOT_RUN = 'NotRun'
+    
+    
     def __init__(self):
         self.pending_lst=[] 
         self.run_lst=[] 
@@ -37,16 +43,22 @@ class TestRunner():
         test_case_instance = TestCase()
         testmethods = [i for i in dir(test_case_instance) if i.startswith('test_')]
         for i in testmethods:
+            test = getattr(test_case_instance, i)
+            test_result = TestResult(test)
             try:
                 test_case_instance.set_up()
             except:
-                self.failed_lst.append(i)
+                pass
             try:
-                getattr(test_case_instance, i)()
-                self.passed_lst.append(i) 
-                self.tests_dict[i]='Passed'
+                test()
+                test_result._TESTRESULT = _PASSED
+                test_result_lst = [test_result._TESTNAME, test_result._TESTRESULT, test_result._STACKTRACE]
+                self.passed_lst.append(test_result_lst)
             except:
-                self.failed_lst.append(i)
+                test_result._TESTRESULT = _FAILED
+                test_result._STACKTRACE = traceback.format_exc()
+                test_result_lst = [test_result._TESTNAME, test_result._TESTRESULT, test_result._STACKTRACE]
+                self.failed_lst.append(test_result_lst)
             finally:
                 self.run_lst.append(i)
                 try:
@@ -107,7 +119,7 @@ class TestRunnerBase():
             self.report_test_started(i)
             try:
                 test_case_instance.set_up()
-                
+                getattr(test_case_instance, i)()
             except:
                 pass
             try:
@@ -117,7 +129,7 @@ class TestRunnerBase():
                 self.report_test_passed(i)
             except:
                 self.failed_lst.append(i)
-                self.report_test_failed(i)
+                #self.report_test_failed(i)
             finally:
                 self.run_lst.append(i)
                 try:
@@ -174,6 +186,7 @@ class TestCase():
     def test_1(self):
         print "Test1"
     
+    
 
 class TestRunnerVerboseReporting(TestRunnerBase):
     
@@ -208,16 +221,17 @@ class TestRunnerFailReporting(TestRunnerBase):
         #return (run, passed, failed)
     
 
-testrunner=TestRunnerVerboseReporting()
+testrunner=TestRunner()
 
 
 
 print testrunner.pending_tests() 
 print testrunner.class_run(TestCase)
+print testrunner.passed_tests() 
 
 '''
 print testrunner.run(testrunner.pending_tests()) 
-print testrunner.run_tests() 
+
 print testrunner.failed_tests() 
 print testrunner.passed_tests()
 '''
