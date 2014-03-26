@@ -28,3 +28,15 @@ def divide (a,b):
         
 divide(1,0)
 divide(42,21)
+
+def wc(s): 
+    numSymb=len(s) 
+    numWords=len(s.split()) 
+    numStr=len(s.split("\n")) 
+    Result={'symbols':numSymb, 'words':numWords, 'strings':numStr} 
+    return Result 
+    
+print wc('''This is just a little samba 
+With all the typical drama 
+Feel the rhythm of the conga (come on) 
+This is just a little samba''')
