@@ -23,7 +23,7 @@ def add_test(fn, *args):
 
 
 def pending_test(pending_test_list):
-        return pending_test_list
+    return pending_test_list
 
 
 def run(pending_test_list):
@@ -40,18 +40,15 @@ def run(pending_test_list):
 
 
 def run_tests():
-    for i in run_test_list:
-        return i
+    return run_test_list
 
 
 def passed_tests():
-    for i in passed_test_list:
-        return i
+    return passed_test_list
 
 
 def failed_tests():
-    for i in failed_test_list:
-        return i
+    return failed_test_list
 
 
 def clear_state():
