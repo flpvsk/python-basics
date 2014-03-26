@@ -110,6 +110,10 @@ def mark_completed_by_text(text):
     mark_completed_by_index(index)
 
 
+def next_pending():
+    return [el[0] for el in _todos if el[1] == PENDING][0]
+
+
 def clear():
     """Clear todo list"."""
     del _todos[:]
