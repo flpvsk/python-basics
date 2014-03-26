@@ -4,7 +4,7 @@ Created on Mar 17, 2014
 @author: Java Student
 '''
  
- def assert_equal(a, b, message="assert_equal default message"):
+def assert_equal(a, b, message="assert_equal default message"):
     assert a == b, "{0} {1} != {2}".format(message, a, b)
 
 #assert_equal(1, 2, "pass")
