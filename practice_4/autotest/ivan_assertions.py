@@ -3,6 +3,8 @@ Created on Mar 17, 2014
 
 @author: Java Student
 '''
+
+
 def assert_equal(a, b):
     if a == b:
         print 'True because: \ra = %i\rb = %i' % (a, b)

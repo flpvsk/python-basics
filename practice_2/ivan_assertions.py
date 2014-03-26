@@ -5,7 +5,7 @@ Created on 20 Mar 2014
 '''
 
 
-def assert_equal(a, b):
+def assert_equal(a, b, message='not equal'):
     if a == b:
         print 'True because: \ra = %i\rb = %i' % (a, b)
     else:
@@ -18,7 +18,7 @@ assert_equal(3, 5)
 assert_equal(4, 4)
 
 
-def assert_not_equal(a, b):
+def assert_not_equal(a, b, message='equal'):
     if a != b:
         print 'True because: \ra = %i\rb = %i' % (a, b)
     else:
@@ -30,7 +30,7 @@ assert_not_equal(3, 5)
 assert_not_equal(4, 4)
 
 
-def assert_true(x):
+def assert_true(x, message='false'):
     if x == True:
         print 'True because: \rx = %i' % (x)
     else:
@@ -42,7 +42,7 @@ assert_true(1)
 assert_true(0)
 
 
-def assert_false(x):
+def assert_false(x, message='true'):
     if x == False:
         print 'True because: \rx = %i' % (x)
     else:
@@ -54,7 +54,7 @@ assert_false(1)
 assert_false(0)
 
 
-def assert_is(a, b):
+def assert_is(a, b, message=' is not'):
     if a is b:
         print 'True because: \ra = %i\rb = %i' % (a, b)
     else:
@@ -66,7 +66,7 @@ assert_is(3, 5)
 assert_is(4, 4)
 
 
-def assert_is_not(a, b):
+def assert_is_not(a, b, message='is'):
     if a is not b:
         print 'True because: \ra = %i\rb = %i' % (a, b)
     else:
@@ -78,7 +78,7 @@ assert_is_not(3, 5)
 assert_is_not(4, 4)
 
 
-def assert_is_none(x):
+def assert_is_none(x, message='not None'):
     if x is None:
         print 'True because: \rx = %s\r' % (x)
     else:
@@ -90,7 +90,7 @@ assert_is_none(None)
 assert_is_none(1)
 
 
-def assert_is_not_none(x):
+def assert_is_not_none(x, message='None'):
     if x is not None:
         print 'True because: \rx = %i\r' % (x)
     else:
@@ -102,7 +102,7 @@ assert_is_not_none(None)
 assert_is_not_none(1)
 
 
-def assert_in(a, b):
+def assert_in(a, b, message='not in'):
     if a in b:
         print 'True because: \ra = %i\rb = %s' % (a, b)
     else:
@@ -116,7 +116,7 @@ assert_in(3, lst1)
 assert_in(5, lst2)
 
 
-def assert_not_in(a, b):
+def assert_not_in(a, b, message='in'):
     if a not in b:
         print 'True because: \ra = %i\rb = %s' % (a, b)
     else:
