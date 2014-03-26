@@ -39,11 +39,9 @@ def assert_in(a, b):
     assert a in b
 
 
-
 @with_msg('{} is False')
 def assert_true(a):
     assert a
-
 
 
 try:
