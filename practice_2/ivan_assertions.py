@@ -14,8 +14,8 @@ def assert_equal(a, b, message='not equal'):
 
 
 print 'assert_equal function tests: \n'
-assert_equal(3, 5)
-assert_equal(4, 4)
+#assert_equal(3, 5)
+#assert_equal(4, 4)
 
 
 def assert_not_equal(a, b, message='equal'):
@@ -26,8 +26,8 @@ def assert_not_equal(a, b, message='equal'):
         print 'False because: \ra = %i\rb = %i' % (a, b)
 
 print '\rassert_not_equal function tests: \n'
-assert_not_equal(3, 5)
-assert_not_equal(4, 4)
+#assert_not_equal(3, 5)
+#assert_not_equal(4, 4)
 
 
 def assert_true(x, message='false'):
@@ -38,8 +38,8 @@ def assert_true(x, message='false'):
         print 'False because: \rx = %i' % (x)
 
 print '\rassert_true function tests: \n'
-assert_true(1)
-assert_true(0)
+#assert_true(1)
+#assert_true(0)
 
 
 def assert_false(x, message='true'):
@@ -50,8 +50,8 @@ def assert_false(x, message='true'):
         print 'False because: \rx = %i' % (x)
 
 print '\rassert_false function tests: \n'
-assert_false(1)
-assert_false(0)
+#assert_false(1)
+#assert_false(0)
 
 
 def assert_is(a, b, message=' is not'):
@@ -62,8 +62,8 @@ def assert_is(a, b, message=' is not'):
         print 'False because: \ra = %i\rb = %i' % (a, b)
 
 print '\rassert_is function tests: \n'
-assert_is(3, 5)
-assert_is(4, 4)
+#assert_is(3, 5)
+#assert_is(4, 4)
 
 
 def assert_is_not(a, b, message='is'):
@@ -74,8 +74,8 @@ def assert_is_not(a, b, message='is'):
         print 'False because: \ra = %i\rb = %i' % (a, b)
 
 print '\rassert_is_not function tests: \n'
-assert_is_not(3, 5)
-assert_is_not(4, 4)
+#assert_is_not(3, 5)
+#assert_is_not(4, 4)
 
 
 def assert_is_none(x, message='not None'):
@@ -86,8 +86,8 @@ def assert_is_none(x, message='not None'):
         print 'False because: \rx = %i' % (x)
 
 print '\rassert_is_none function tests: \n'
-assert_is_none(None)
-assert_is_none(1)
+#assert_is_none(None)
+#assert_is_none(1)
 
 
 def assert_is_not_none(x, message='None'):
@@ -98,8 +98,8 @@ def assert_is_not_none(x, message='None'):
         print 'False because: \rx = %s' % (x)
 
 print '\rassert_is_not_none function tests: \n'
-assert_is_not_none(None)
-assert_is_not_none(1)
+#assert_is_not_none(None)
+#assert_is_not_none(1)
 
 
 def assert_in(a, b, message='not in'):
@@ -110,10 +110,10 @@ def assert_in(a, b, message='not in'):
         print 'False because: \ra = %i\rb = %s' % (a, b)
 
 print '\rassert_in function tests: \n'
-lst1 = [1, 2, 3, 4, 5]
-lst2 = [3, 6, 8, 0]
-assert_in(3, lst1)
-assert_in(5, lst2)
+#lst1 = [1, 2, 3, 4, 5]
+#lst2 = [3, 6, 8, 0]
+#assert_in(3, lst1)
+#assert_in(5, lst2)
 
 
 def assert_not_in(a, b, message='in'):
@@ -126,5 +126,5 @@ def assert_not_in(a, b, message='in'):
 print '\rassert_not_in function tests: \n'
 lst1 = [1, 2, 3, 4, 5]
 lst2 = [3, 6, 8, 0]
-assert_not_in(3, lst1)
-assert_not_in(5, lst2)
+#assert_not_in(3, lst1)
+#assert_not_in(5, lst2)
