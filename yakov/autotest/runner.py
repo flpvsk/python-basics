@@ -3,6 +3,8 @@ Created on Mar 13, 2014
 
 @author: Java Student
 '''
+from test_result import TestResult
+import traceback
 
 
 class TestRunner():
@@ -13,6 +15,7 @@ class TestRunner():
     # value: None-pending, 0-passed, 1-failed
     def __init__(self, TestClass=None):
         self._tests = dict()
+        self._test_res_list = []
         if TestClass != None:
             self._TestClass = TestClass()
 
@@ -37,18 +40,26 @@ class TestRunner():
                 self._TestClass.tear_down()
             except:
                 self._tests[tst] = self._FAILED
+                t = TestResult(tst.__name__, self._FAILED, traceback.format_exc())
+                self._test_res_list.append(t)
             else:
                 self._tests[tst] = self._PASSED
+                t = TestResult(tst.__name__, self._PASSED)
+                self._test_res_list.append(t)
         return (len(self.ran_tests()), len(self.passed_tests()), len(self.failed_tests()))
 
+# TODO: return list of TestResult objects
     def ran_tests(self):
         return [func for func in self._tests.keys() if self._tests[func] != self._PENDING]
 
+# TODO: return list of TestResult objects
     def passed_tests(self):
         return [func for func in self._tests.keys() if self._tests[func] == self._PASSED]
 
+# TODO: return list of TestResult objects
     def failed_tests(self):
         return [func for func in self._tests.keys() if self._tests[func] == self._FAILED]
 
+# TODO: return list of TestResult objects
     def clear_state(self):
         self._tests.clear()
