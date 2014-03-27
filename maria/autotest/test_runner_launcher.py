@@ -1,10 +1,8 @@
 import importlib
 import sys
-from TestRunnerVerboseReporting import TestRunnerVerboseReporting
-from TestRunnerFailReporting import TestRunnerFailReporting
-from FailReporter import FailReporter
-from VerboseReporter import VerboseReporter
-from TestRunnerReporter import TestRunnerReporter
+from fail_reporter import FailReporter
+from verbose_reporter import VerboseReporter
+from test_runner import TestRunner
 from utils import noop
 
 
@@ -12,24 +10,17 @@ class TestRunnerLauncher(object):
     TEST_METHOD_PREFIX = "test_"
     SET_UP_METHOD_NAME = "set_up"
     TEAR_DOWN_METHOD_NAME = "tear_down"
-    TEST_FUNCTIONS_CONTAINER_TYPE_NAME = "module_functions"
-    CLASS_TEST_CONTAINER_TYPE_NAME = "class"
-    VERBOSE_REPORTING_TYPE_NAME = "verbose"
-    FAIL_REPORTING_TYPE_NAME = "fail"
-    VERBOSE_REPORTER_TYPE_NAME = "verbose_reporter"
-    FAIL_REPORTER_TYPE_NAME = "fail_reporter"
+    TEST_FUNCTIONS_CONTAINER = "module_functions"
+    CLASS_TEST_CONTAINER = "class"
+    VERBOSE_REPORTER = "verbose"
+    FAIL_REPORTER = "fail"
 
-    test_runners_dict = {VERBOSE_REPORTING_TYPE_NAME:
-                        TestRunnerVerboseReporting,
-                        FAIL_REPORTING_TYPE_NAME:
-                        TestRunnerFailReporting,
-                        VERBOSE_REPORTER_TYPE_NAME:
-                        VerboseReporter,
-                        FAIL_REPORTER_TYPE_NAME:
-                        FailReporter}
+    test_reporters_dict = {VERBOSE_REPORTER:
+                           VerboseReporter,
+                           FAIL_REPORTER:
+                           FailReporter}
 
-    def __init__(self, test_module_name, test_container_type,
-                 test_reporting_name=FAIL_REPORTING_TYPE_NAME):
+    def __init__(self, test_module_name, test_container_type, test_reporter):
         '''Specifies test runner launcher
 
         :param test_module_name: name of module with tests
@@ -38,16 +29,12 @@ class TestRunnerLauncher(object):
         '''
         self.test_module = importlib.import_module(test_module_name)
         self.test_container_type = test_container_type
-        if test_reporting_name == self.VERBOSE_REPORTER_TYPE_NAME or \
-               test_reporting_name == self.FAIL_REPORTER_TYPE_NAME:
-            self.test_runner = TestRunnerReporter(
-                            self.test_runners_dict[test_reporting_name]())
-        else:
-            self.test_runner = self.test_runners_dict[test_reporting_name]()
+        self.test_runner = TestRunner(
+                                    self.test_reporters_dict[test_reporter]())
         self.test_extractors_dict = \
-                {self.TEST_FUNCTIONS_CONTAINER_TYPE_NAME:
+                {self.TEST_FUNCTIONS_CONTAINER:
                  self.__extract_tests_from_module_functions,
-                 self.CLASS_TEST_CONTAINER_TYPE_NAME:
+                 self.CLASS_TEST_CONTAINER:
                  self.__extract_tests_from_classes}
 
     def execute_tests(self):

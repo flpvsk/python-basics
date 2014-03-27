@@ -1,9 +1,9 @@
 import traceback
-from TestResult import TestResult
+from test_result import TestResult
 from utils import noop
 
 
-class TestRunnerReporter(object):
+class TestRunner(object):
 
     def __init__(self, reporter):
         self.reporter = reporter
