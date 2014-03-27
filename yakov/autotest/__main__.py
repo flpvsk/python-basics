@@ -10,6 +10,13 @@ from examples_5.yakov_todo_test_class import TodoTestCases
 
 run = TestRunner(TodoTestCases)
 
+# True: run from CLI
+# False: run from Eclipse
+_CLI = False
+# True: tests from classes
+# False: tests from functions
+_CLASS = True
+
 
 def path_to_module(path):
     #print path
@@ -18,7 +25,10 @@ def path_to_module(path):
         parts = path.split("/")
     if parts[0] == '':
         parts.pop(0)
-    #print parts
+    # Need additional pop if tests are run from Eclipse
+    if _CLI == False:
+        #print parts
+        parts.pop(0)
     module = ".".join(parts)
     #print module
     return module.replace('.py', '')
@@ -31,9 +41,11 @@ tm = importlib.import_module(path_to_module(sys.argv[1]))
 
 def prepare_tests_to_run():
     run.clear_state()
-    #for t in tm.__all__:
-        #run.add_test(getattr(tm, t))
-    run.add_tests_from_class()
+    if _CLASS:
+        run.add_tests_from_class()
+    else:
+        for t in tm.__all__:
+            run.add_test(getattr(tm, t))
     #print run.pending_tests()
 
 

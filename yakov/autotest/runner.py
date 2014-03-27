@@ -6,15 +6,15 @@ Created on Mar 13, 2014
 
 
 class TestRunner():
+    _PENDING = "pending"
+    _PASSED = "passed"
+    _FAILED = "failed"
     # key: test
     # value: None-pending, 0-passed, 1-failed
     def __init__(self, TestClass=None):
         self._tests = dict()
         if TestClass != None:
             self._TestClass = TestClass()
-        self._PENDING = "pending"
-        self._PASSED = "passed"
-        self._FAILED = "failed"
 
     # Test as a function
     def add_test(self, fn):
