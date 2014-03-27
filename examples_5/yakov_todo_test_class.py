@@ -14,8 +14,13 @@ class TodoTestCases():
         self._tst_pending = 'pending'
         self._tst_compl = 'completed'
 
-    def _three_items(self):
+    def set_up(self):
         self._todo.clear()
+
+    def tear_down(self):
+        pass
+
+    def _three_items(self):
         self._todo.add('one')
         self._todo.add('two')
         self._todo.add('three')
@@ -33,32 +38,26 @@ class TodoTestCases():
             pass
 
     def test_add(self):
-        self._todo.clear()
         self._todo.add('bbb')
         self._test_pass(ass.assert_equal, self._todo.items(), (('bbb', self._tst_pending),), self.test_add.__name__)
 
     def test_clear(self):
-        self._todo.clear()
         self._test_pass(ass.assert_equal, self._todo.items(), (), self.test_clear.__name__)
 
     def test_new_add_index(self):
-        self._todo.clear()
         self._test_pass(ass.assert_equal, self._todo.add('txt'), 0, self.test_new_add_index.__name__)
 
     def test_existing_add_index(self):
-        self._todo.clear()
         self._todo.add('zero')
         self._test_pass(ass.assert_equal, self._todo.add('zero'), 0, self.test_existing_add_index.__name__)
 
     def test_items_not_duplicated(self):
-        self._todo.clear()
         self._todo.add('oppa')
         self._todo.add('oppa')
         self._test_pass(ass.assert_equal, self._todo.items(), (('oppa', self._tst_pending),), self.test_items_not_duplicated.__name__)
 
     # How to catch exception by assertions?
     def test_empty_add_error(self):
-        self._todo.clear()
         self._test_pass(ass.assert_is_none, self._todo.add(''), self.test_empty_add_error.__name__)
 
     def test_several_tasks(self):
