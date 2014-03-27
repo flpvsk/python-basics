@@ -22,7 +22,8 @@ class TestRunner():
 
     # Tests as class methods
     def add_tests_from_class(self):
-        self._tests = {tst:self._PENDING for tst in dir(self._TestClass) if tst.find('test') == 0}
+        tst_list = dir(self._TestClass)
+        self._tests = {getattr(self._TestClass, tst):self._PENDING for tst in tst_list if tst.find('test') == 0}
 
     def pending_tests(self):
         return [func for func in self._tests.keys() if self._tests[func] == self._PENDING]
@@ -31,7 +32,9 @@ class TestRunner():
         to_run = self.pending_tests()
         for tst in to_run:
             try:
+                self._TestClass.set_up()
                 tst()
+                self._TestClass.tear_down()
             except:
                 self._tests[tst] = self._FAILED
             else:
