@@ -8,12 +8,38 @@ import sys
 import traceback
 from TestResult import TestResult
 
-
 __all__ = ['TestRunner']
 
 
 def fn(): 
     print 'another notRun test has been just run' 
+    
+
+
+def with_set_up(set_up_func):
+
+    def decorator(f):
+
+        def wrapper(*args, **kwargs):
+            set_up_func()
+            return f(*args, **kwargs)
+        return wrapper
+
+    return decorator
+
+def with_tear_down(tear_down_func):
+
+    def decorator(f):
+
+        def wrapper(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            finally:
+                tear_down_func()
+
+        return wrapper
+    
+    return decorator
 
 
 class TestRunner():
@@ -166,6 +192,13 @@ class TestRunnerBase():
         self.pending_lst, self.passed_lst, self.failed_lst, self.run_lst = [], [], [], []
 
 
+def my_set_up():
+    print "My setup"
+    
+    
+def my_tear_down():
+    print "My tear down "
+
 class TestCase():
 
 
@@ -176,13 +209,13 @@ class TestCase():
     def set_up(self):
         print "set_UP"
 
-
+    @with_set_up(my_set_up)
     def test_2(self):
         print "Test2"
 
-
+    @with_tear_down(my_tear_down)
     def test_1(self):
-        print "Test1"
+        raise Exception
     
     
 
@@ -218,6 +251,9 @@ class TestRunnerFailReporting(TestRunnerBase):
     #def report_all_finished(self, run, passed, failed):
         #return (run, passed, failed)
     
+    
+    
+
 
 testrunner=TestRunner()
 
