@@ -38,14 +38,10 @@ class TestRunnerLauncher(object):
                  self.__extract_tests_from_classes}
 
     def execute_tests(self):
-        test_lists_info = self.test_extractors_dict[self.test_container_type]()
+        test_lists = self.test_extractors_dict[self.test_container_type]()
         self.test_runner.clear_state()
-        for test_list_info in test_lists_info:
-            self.test_runner.set_tests_set_up(test_list_info.set_up_method)
-            self.test_runner.set_tests_tear_down(test_list_info.
-                                                 tear_down_method)
-            [self.test_runner.add_test(test) for test in
-                                             test_list_info.test_list]
+        for test_list in test_lists:
+            [self.test_runner.add_test(test) for test in test_list]
             self.test_runner.run()
         if len(self.test_runner.failed_tests()) != 0:
             sys.exit(1)
@@ -55,7 +51,8 @@ class TestRunnerLauncher(object):
     def __extract_tests_from_module_functions(self):
         tests = [getattr(self.test_module, f) for f
                 in dir(self.test_module) if f in self.test_module.__all__]
-        return TestListInfoContainer(tests, noop, noop)
+        return [with_tear_down(noop)
+                (with_set_up(noop)(test)) for test in tests]
 
     def __extract_tests_from_classes(self):
         test_classes = [getattr(self.test_module, f)() for f
@@ -75,12 +72,44 @@ class TestRunnerLauncher(object):
                 set_up_method = getattr(test_class, method_name)
             if method_name == self.TEAR_DOWN_METHOD_NAME:
                 tear_down_method = getattr(test_class, method_name)
-        return TestListInfoContainer(tests, set_up_method, tear_down_method)
+        return [with_tear_down(tear_down_method)
+                (with_set_up(set_up_method)(test)) for test in tests]
 
 
-class TestListInfoContainer(object):
+def with_set_up(set_up_func):
 
-    def __init__(self, test_list, set_up_method, tear_down_method):
-        self.test_list = test_list
-        self.set_up_method = set_up_method
-        self.tear_down_method = tear_down_method
+    def decorator(test):
+
+        def wrapper():
+            set_up_func()
+            test()
+
+        inherit_attrs(test, wrapper)
+        return wrapper
+
+    return decorator
+
+
+def with_tear_down(tear_down_func):
+
+    def decorator(test):
+
+        def wrapper():
+            try:
+                test()
+            finally:
+                tear_down_func()
+
+        inherit_attrs(test, wrapper)
+        return wrapper
+
+    return decorator
+
+
+def inherit_attrs(source, target):
+    inherited_attrs = ["__name__", "__module__", "im_class"]
+    for attr in inherited_attrs:
+            try:
+                setattr(target, attr, getattr(source, attr))
+            except:
+                pass
