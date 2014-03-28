@@ -9,7 +9,8 @@ if __name__ == '__main__':
                                  TestRunnerLauncher.CLASS_TEST_CONTAINER])
     parser.add_argument('-reporter', help='Type of test reporter',
                         choices=[TestRunnerLauncher.FAIL_REPORTER,
-                                 TestRunnerLauncher.VERBOSE_REPORTER],
+                                 TestRunnerLauncher.VERBOSE_REPORTER,
+                                 TestRunnerLauncher.TEXT_FILE_REPORTER],
                         default=TestRunnerLauncher.FAIL_REPORTER)
     args = parser.parse_args()
     launcher = TestRunnerLauncher(args.module_name,

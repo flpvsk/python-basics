@@ -2,6 +2,7 @@ import importlib
 import sys
 from fail_reporter import FailReporter
 from verbose_reporter import VerboseReporter
+from text_file_reporter import TextFileReporter
 from test_runner import TestRunner
 from utils import noop
 
@@ -14,11 +15,14 @@ class TestRunnerLauncher(object):
     CLASS_TEST_CONTAINER = "class"
     VERBOSE_REPORTER = "verbose"
     FAIL_REPORTER = "fail"
+    TEXT_FILE_REPORTER = "text_file"
 
     test_reporters_dict = {VERBOSE_REPORTER:
                            VerboseReporter,
                            FAIL_REPORTER:
-                           FailReporter}
+                           FailReporter,
+                           TEXT_FILE_REPORTER:
+                           TextFileReporter}
 
     def __init__(self, test_module_name, test_container_type, test_reporter):
         '''Specifies test runner launcher
