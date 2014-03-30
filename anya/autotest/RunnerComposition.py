@@ -2,6 +2,7 @@
 Created on Mar 27, 2014
 
 @author: Java Student
+tasks:#79, 82
 '''
 
 from anya.autotest.TestResult import TestResult
