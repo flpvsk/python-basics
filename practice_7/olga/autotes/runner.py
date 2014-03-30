@@ -1,6 +1,25 @@
 import traceback
 from assertions import *
 from examples_5.todo_tests import *
+import functools
+from datetime import datetime
+import sys
+import os
+
+
+
+def logger(f):
+    def run_wrapper(*args, **kwargs):
+        log_dir = "C:\\test-results\[{isodatetime}]-tests-results.txt".format(isodatetime=datetime.now().isoformat().replace(':', '.'))
+        if not os.path.exists(os.path.dirname(log_dir)):
+            os.makedirs(os.path.dirname(log_dir))
+        std = sys.stdout
+        sys.stdout = open(log_dir, 'w')
+        with  sys.stdout:
+            f(*args, **kwargs)
+        sys.stdout = std
+        
+    return run_wrapper    
 
 class TestRunnerReporter(object):
     tests = {}
@@ -15,7 +34,7 @@ class TestRunnerReporter(object):
     def __init__(self, some_reporter):
         self.reporter = some_reporter
         test_case = TodoTestCase()
-        self.tests = {m: [self.PENDING, getattr(test_case, m)] for m in dir(test_case) if m.startswith("test_")}
+        #self.tests = {m: [self.PENDING, getattr(test_case, m)] for m in dir(test_case) if m.startswith("test_")}
         if hasattr(test_case, "set_up"):
             self.set_up = getattr(test_case, "set_up")
         if hasattr(test_case, "tear_down"):
@@ -27,6 +46,7 @@ class TestRunnerReporter(object):
     def pending_tests(self):
         return [x for x in self.tests if self.tests[x][0] == "pending"]
     
+    @logger
     def run(self):
         for x in self.tests:
             if self.tests[x][0] == "pending":
