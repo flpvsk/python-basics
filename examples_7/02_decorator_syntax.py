@@ -18,7 +18,7 @@ def print_before_and_after(f):
 
 @print_before_and_after
 def sum_of_two_with_decorator(x, y):
-    print x + y
+    return x + y
 
 
 sum_of_two_with_decorator(1, 2)

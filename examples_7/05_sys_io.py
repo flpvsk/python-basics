@@ -2,7 +2,7 @@ import sys
 
 password = None
 
-while password != 'tefteli\r\n':
+while password != 'tefteli\n':
 
     if password != None:
         sys.stdout.write('Wrong password!\n')
