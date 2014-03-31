@@ -1,4 +1,4 @@
-from TestResult import TestResult
+from test_result import TestResult
 
 
 class FailReporter(object):
