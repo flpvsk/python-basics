@@ -40,6 +40,7 @@ class VerboseReporter(object):
 
 
 class TextFileReporter(object):
+    
     BASE_DIR = os.path.join("C:\\", "test-results")
 
     def __init__(self):
@@ -73,6 +74,7 @@ class TextFileReporter(object):
         
         
 class TestResult(object):
+    
     FAILED_TEST_RESULT = "Failed"
     PASSED_TEST_RESULT = "Pass"
 
