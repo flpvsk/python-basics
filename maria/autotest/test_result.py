@@ -8,6 +8,7 @@ class TestResult(object):
             self.full_test_name += "." + test.im_class.__name__
         except AttributeError:
             pass
+        self.full_test_name += "." + test.__name__
         self.test_result_status = test_result_status
         self.stacktrace = stacktrace
 
