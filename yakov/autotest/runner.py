@@ -39,11 +39,11 @@ class TestRunner():
                 tst()
             except:
                 self._tests[tst] = TestResult.FAILED
-                t = TestResult(tst.__name__, TestResult.FAILED, traceback.format_exc())
+                t = TestResult(tst, TestResult.FAILED, traceback.format_exc())
                 self._test_res_list.append(t)
             else:
                 self._tests[tst] = TestResult.PASSED
-                t = TestResult(tst.__name__, TestResult.PASSED)
+                t = TestResult(tst, TestResult.PASSED)
                 self._test_res_list.append(t)
             finally:
                 self._TestClass.tear_down()
