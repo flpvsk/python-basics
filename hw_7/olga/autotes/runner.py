@@ -18,8 +18,7 @@ def logger(f):
         with  sys.stdout:
             f(*args, **kwargs)
         sys.stdout = std
-        
-    return run_wrapper    
+    return run_wrapper
 
 class TestRunnerReporter(object):
     tests = {}
