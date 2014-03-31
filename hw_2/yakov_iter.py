@@ -7,9 +7,7 @@ import practice_2.yakov_assertions as ya
 
 
 def unique(lst):
-    dic = dict()
-    res = dic.fromkeys(lst)
-    return res.keys()
+    return {el: None for el in lst}.keys()
 
 
 def test_unique():
