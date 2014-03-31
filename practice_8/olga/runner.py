@@ -44,6 +44,14 @@ class TestRunnerReporter(object):
         self._failed_tests = []
         #self._pending_tests =  [getattr(test_case, m) for m in dir(test_case) if m.startswith("test_")]
     
+    @staticmethod
+    def with_verbose_reporter():
+        return TestRunnerReporter(VerboseReporter())
+    
+    @staticmethod
+    def with_fail_reporter():
+        return TestRunnerReporter(FailReporter())
+    
     def add_test(self, fn):
         self.tests[fn.__name__] = ["pending", fn]
         
@@ -144,4 +152,10 @@ if __name__ == "__main__":
     my_runner.add_test(test_assert_not_equal)
     my_runner.run()
     print(my_runner.passed_tests)
+    print("runner 2")
     
+    runner2 = my_runner.with_fail_reporter()
+    runner2.add_test(test_assert_equal)
+    runner2.add_test(test_assert_is_none)
+    runner2.add_test(test_assert_not_equal)
+    runner2.run()
