@@ -37,7 +37,6 @@ class TestRunner():
             try:
                 self._TestClass.set_up()
                 tst()
-                self._TestClass.tear_down()
             except:
                 self._tests[tst] = self._FAILED
                 t = TestResult(tst.__name__, self._FAILED, traceback.format_exc())
@@ -46,6 +45,8 @@ class TestRunner():
                 self._tests[tst] = self._PASSED
                 t = TestResult(tst.__name__, self._PASSED)
                 self._test_res_list.append(t)
+            finally:
+                self._TestClass.tear_down()
         return (len(self.ran_tests()), len(self.passed_tests()), len(self.failed_tests()))
 
 # TODO: return list of TestResult objects
