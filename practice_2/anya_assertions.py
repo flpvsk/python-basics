@@ -11,7 +11,7 @@ def assert_equal(a, b):
 try:
     assert_equal(1, 1)
 except AssertionError:
-    print("Test assert_equal(1, 1) failed!")
+    raise("Test assert_equal(1, 1) failed!")
     
 try:
     assert_equal(1, 2)

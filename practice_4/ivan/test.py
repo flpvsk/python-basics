@@ -11,9 +11,11 @@ from examples_4.todo import add
 from examples_4.todo import PENDING
 from examples_4.todo import COMPLETED
 from examples_4.todo import status_by_index
+from examples_4.todo import status_by_text
 from examples_4.todo import mark_completed_by_text
 from examples_4.todo import mark_completed_by_index
 from examples_4.todo import _index_by_text
+from ivan.autotest.test_runner import TestRunner
 
 __all__ = ('test_clear',
            'test_add',
@@ -79,8 +81,8 @@ def test_status_by_text():
     add('Meat')
     add('Beer')
     mark_completed_by_text(text2)
-    assert_equal(PENDING, status_by_index(text1))
-    assert_equal(COMPLETED, status_by_index(text2))
+    assert_equal(PENDING, status_by_text(text1))
+    assert_equal(COMPLETED, status_by_text(text2))
 
 
 def test_mark_completed_by_index():
@@ -113,3 +115,17 @@ def test_index_by_text():
     assert_equal(0, _index_by_text(todo1_text))
     add(todo2_text)
     assert_equal(1, _index_by_text(todo2_text))
+
+testrunner = TestRunner()
+testrunner.add_test(test_clear)
+testrunner.add_test(test_add)
+testrunner.add_test(test_add_index)
+testrunner.add_test(test_duplicates)
+testrunner.add_test(test_description)
+testrunner.add_test(test_status_by_index)
+testrunner.add_test(test_status_by_text)
+testrunner.add_test(test_mark_completed_by_index)
+testrunner.add_test(test_mark_completed_by_text)
+testrunner.add_test(test_index_by_text)
+
+print testrunner.run()

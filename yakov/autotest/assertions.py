@@ -46,7 +46,7 @@ def assert_equal(a, b, message=fl):
 #Tests
 def test_assert_equal():
     divider("assert_equal")
-    test_pass(assert_equal, 1, 1)
+    test_pass(assert_equal, 1, 2)
     test_fail(assert_equal, 1, 2)
     test_pass(assert_equal, "abc", "abc")
     test_fail(assert_equal, "qwerty ", "qwerty")
