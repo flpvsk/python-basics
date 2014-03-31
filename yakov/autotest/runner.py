@@ -9,8 +9,8 @@ import traceback
 
 class TestRunner():
     _PENDING = "pending"
-    _PASSED = "passed"
-    _FAILED = "failed"
+    _PASSED = "passed" # Obsolete
+    _FAILED = "failed" # Obsolete
     # key: test
     # value: None-pending, 0-passed, 1-failed
     def __init__(self, TestClass=None):
@@ -38,29 +38,29 @@ class TestRunner():
                 self._TestClass.set_up()
                 tst()
             except:
-                self._tests[tst] = self._FAILED
-                t = TestResult(tst.__name__, self._FAILED, traceback.format_exc())
+                self._tests[tst] = TestResult.FAILED
+                t = TestResult(tst.__name__, TestResult.FAILED, traceback.format_exc())
                 self._test_res_list.append(t)
             else:
-                self._tests[tst] = self._PASSED
-                t = TestResult(tst.__name__, self._PASSED)
+                self._tests[tst] = TestResult.PASSED
+                t = TestResult(tst.__name__, TestResult.PASSED)
                 self._test_res_list.append(t)
             finally:
                 self._TestClass.tear_down()
         return (len(self.ran_tests()), len(self.passed_tests()), len(self.failed_tests()))
 
-# TODO: return list of TestResult objects
     def ran_tests(self):
-        return [func for func in self._tests.keys() if self._tests[func] != self._PENDING]
+        #return [func for func in self._tests.keys() if self._tests[func] != self._PENDING]
+        return [res for res in self._test_res_list]
 
-# TODO: return list of TestResult objects
     def passed_tests(self):
-        return [func for func in self._tests.keys() if self._tests[func] == self._PASSED]
+        #return [func for func in self._tests.keys() if self._tests[func] == self._PASSED]
+        return [res for res in self._test_res_list if res.result() == TestResult.PASSED]
 
-# TODO: return list of TestResult objects
     def failed_tests(self):
-        return [func for func in self._tests.keys() if self._tests[func] == self._FAILED]
+        #return [func for func in self._tests.keys() if self._tests[func] == self._FAILED]
+        return [res for res in self._test_res_list if res.result() == TestResult.FAILED]
 
-# TODO: return list of TestResult objects
     def clear_state(self):
         self._tests.clear()
+        self._test_res_list = []

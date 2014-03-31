@@ -56,10 +56,10 @@ class TodoTestCases():
     def test_several_tasks(self):
         self._three_items()
         res = self._todo.items()
-        ass.assert_equal(3, len(res), self.test_several_tasks + ' - length')
-        ass.assert_in(('one', self._tst_pending), res, self.test_several_tasks + ' - item one')
-        ass.assert_in(('two', self._tst_pending), res, self.test_several_tasks + ' - item two')
-        ass.assert_in(('three', self._tst_pending), res, self.test_several_tasks + ' - item three')
+        ass.assert_equal(3, len(res), self.test_several_tasks.__name__ + ' - length')
+        ass.assert_in(('one', self._tst_pending), res, self.test_several_tasks.__name__ + ' - item one')
+        ass.assert_in(('two', self._tst_pending), res, self.test_several_tasks.__name__ + ' - item two')
+        ass.assert_in(('three', self._tst_pending), res, self.test_several_tasks.__name__ + ' - item three')
 
     def test_completed_status_by_index(self):
         self._three_items()
@@ -71,14 +71,18 @@ class TodoTestCases():
         self._todo.mark_completed_by_index(1)
         ass.assert_equal(self._todo.items(), (('one', self._tst_pending), ('two', self._tst_compl), ('three', self._tst_pending)), self.test_only_one_completed_by_index.__name__)
 
+# Test is intentionally made to be failed
     def test_completed_status_by_text(self):
         self._three_items()
         self._todo.mark_completed_by_text('one')
-        ass.assert_equal(self._todo.status_by_index(0), self._tst_compl, self.test_completed_status_by_text.__name__)
+        #To pass this test use index=0
+        ass.assert_equal(self._todo.status_by_index(1), self._tst_compl, self.test_completed_status_by_text.__name__)
 
+# Test is intentionally made to be failed
     def test_only_one_completed_by_text(self):
         self._three_items()
-        self._todo.mark_completed_by_text('three')
+        #To pass this test use 'three'
+        self._todo.mark_completed_by_text('two')
         ass.assert_equal(self._todo.items(), (('one', self._tst_pending), ('two', self._tst_pending), ('three', self._tst_compl)), self.test_only_one_completed_by_text.__name__)
 
     def test_check_status_by_text(self):
