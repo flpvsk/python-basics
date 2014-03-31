@@ -8,6 +8,7 @@ from examples_4.todo import status_by_text
 from examples_4.todo import mark_completed_by_text
 from examples_4.todo import mark_completed_by_index
 from examples_4.todo import _index_by_text
+from ivan.autotest.test_runner import TestRunner
 
 __all__ = ('test_clear', 'test_items', 'test_add_return_value',
            'test_same_task', 'test_task_with_no_descr',
@@ -116,3 +117,7 @@ def test_index_by_text():
     compare(0, _index_by_text(todo1_text))
     add(todo2_text)
     compare(1, _index_by_text(todo2_text))
+
+testrunner = TestRunner()
+testrunner.add_test(test_clear)
+testrunner.run()
