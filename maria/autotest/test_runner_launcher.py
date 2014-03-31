@@ -1,9 +1,11 @@
 import importlib
 import sys
-from fail_reporter import FailReporter
-from verbose_reporter import VerboseReporter
-from text_file_reporter import TextFileReporter
+from reporters import FailReporter
+from reporters import VerboseReporter
+from reporters import TextFileReporter
 from test_runner import TestRunner
+from decorators import with_tear_down
+from decorators import with_set_up
 from utils import noop
 
 
@@ -47,7 +49,7 @@ class TestRunnerLauncher(object):
         for test_list in test_lists:
             [self.test_runner.add_test(test) for test in test_list]
             self.test_runner.run()
-        if len(self.test_runner.failed_tests()) != 0:
+        if len(self.test_runner.failed_tests) != 0:
             sys.exit(1)
         else:
             sys.exit(0)
@@ -80,40 +82,3 @@ class TestRunnerLauncher(object):
                 (with_set_up(set_up_method)(test)) for test in tests]
 
 
-def with_set_up(set_up_func):
-
-    def decorator(test):
-
-        def wrapper():
-            set_up_func()
-            test()
-
-        inherit_attrs(test, wrapper)
-        return wrapper
-
-    return decorator
-
-
-def with_tear_down(tear_down_func):
-
-    def decorator(test):
-
-        def wrapper():
-            try:
-                test()
-            finally:
-                tear_down_func()
-
-        inherit_attrs(test, wrapper)
-        return wrapper
-
-    return decorator
-
-
-def inherit_attrs(source, target):
-    inherited_attrs = ["__name__", "__module__", "im_class"]
-    for attr in inherited_attrs:
-            try:
-                setattr(target, attr, getattr(source, attr))
-            except:
-                pass

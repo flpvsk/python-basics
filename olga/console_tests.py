@@ -8,7 +8,7 @@ def console_test_assert_equal():
     
     
 def console_test_assert_not_equal():
-    assert_not_equal(1,2)
+    assert_not_equal(1,1)
     
     
 def console_test_assert_is_none():
