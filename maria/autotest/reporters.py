@@ -40,7 +40,7 @@ class VerboseReporter(object):
 
 
 class TextFileReporter(object):
-    BASE_DIR = os.path.join("C:\\CVS", "test-results")
+    BASE_DIR = os.path.join("C:\\", "test-results")
 
     def __init__(self):
         self.file_name = None
