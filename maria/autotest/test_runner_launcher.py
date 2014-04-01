@@ -76,5 +76,3 @@ class TestRunnerLauncher(object):
                 tear_down_method = getattr(test_class, method_name)
         return [with_tear_down(tear_down_method)
                 (with_set_up(set_up_method)(test)) for test in tests]
-
-
