@@ -20,8 +20,8 @@ class FailReporter(object):
                                             len(passed_tests_list))
         print "Count of failed tests: {}".format(
                                             len(failed_tests_list))
-        
-        
+
+
 class VerboseReporter(object):
 
     def report_test_started(self, test):
@@ -40,7 +40,7 @@ class VerboseReporter(object):
 
 
 class TextFileReporter(object):
-    BASE_DIR = os.path.join("C:\\", "test-results")
+    BASE_DIR = os.path.join("C:\\CVS", "test-results")
 
     def __init__(self):
         self.file_name = None
@@ -49,7 +49,7 @@ class TextFileReporter(object):
         if not self.file_name:
             self.__create_text_file()
         with open(self.file_name, 'a') as f:
-            f.write("Test '{}' has been started\n".format(test.__name__))
+            f.write("Test '{}' has been started\n".format(get_full_name(test)))
 
     def report_test_finished(self, test_result):
         with open(self.file_name, 'a') as f:
@@ -70,19 +70,14 @@ class TextFileReporter(object):
         isodatetime = datetime.now().isoformat().replace(':', '.')
         self.file_name = os.path.join(self.BASE_DIR,
                                       isodatetime + "-tests-results.txt")
-        
-        
+
+
 class TestResult(object):
     FAILED_TEST_RESULT = "Failed"
     PASSED_TEST_RESULT = "Pass"
 
     def __init__(self, test, test_result_status, stacktrace=None):
-        self.full_test_name = test.__module__
-        try:
-            self.full_test_name += "." + test.im_class.__name__
-        except AttributeError:
-            pass
-        self.full_test_name += "." + test.__name__
+        self.full_test_name = get_full_name(test)
         self.test_result_status = test_result_status
         self.stacktrace = stacktrace
 
@@ -96,4 +91,16 @@ class TestResult(object):
                             self.full_test_name, self.test_result_status)
         if self.stacktrace:
             test_result_string += " Stacktrace:\n {}".format(self.stacktrace)
+
         return test_result_string
+
+
+def get_full_name(method):
+    full_name = method.__module__
+    try:
+        full_name += "." + method.im_class.__name__
+    except AttributeError:
+        pass
+    full_name += "." + method.__name__
+
+    return full_name

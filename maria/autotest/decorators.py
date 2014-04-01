@@ -1,5 +1,6 @@
 import sys
 
+
 def with_set_up(set_up_func):
 
     def decorator(test):
@@ -37,7 +38,6 @@ def inherit_attrs(source, target):
                 setattr(target, attr, getattr(source, attr))
             except:
                 pass
-
 
 
 def log(f):
