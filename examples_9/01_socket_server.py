@@ -2,7 +2,7 @@ from socket import socket
 
 def main():
     server_sock = socket()
-    server_sock.bind(('', 9000))
+    server_sock.bind(('', 8000))
     server_sock.listen(1)
 
     try:
@@ -16,8 +16,8 @@ def main():
                 if not data:
                     break
 
-            print('Got data from {}'.format(addr))
-            conn.send('Got: {}'.format(data))
+                print('Got data from {}'.format(addr))
+                conn.send('Got: {}'.format(data))
 
         finally:
             print('Connection from {} closed'.format(addr))
