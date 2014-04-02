@@ -1,6 +1,6 @@
 class Currency(object):
 
-    def __init__(self, name, symbol, exchange_rates=[]):
+    def __init__(self, name, symbol, exchange_rates={}):
         self._name = name
         self._symbol = symbol
         self._exchange_rates = exchange_rates
@@ -28,15 +28,9 @@ class Money(object):
         self.currency = currency
 
     def convert_to(self, target_currency):
-        return self.amount * \
-                 self.currency.exchange_rates[target_currency.name]
+        return Money(self.amount *
+                     self.currency.exchange_rates[target_currency.name],
+                     target_currency)
 
     def __str__(self):
-        return self.amount + self.currency.symbol
-
-
-dict = {'Euro': 23}
-cur = Currency("dollar", "$", dict)
-
-print cur
-print cur.exchange_rates
+        return str(self.amount) + self.currency.symbol
