@@ -27,6 +27,6 @@ def extract_tests_from_file(test_file):
 
 
 if __name__ == '__main__':
-    test_directory = "C:\\CVS\\test-results"
+    test_directory = "C:\\test-results"
     for test_names in test_result_parser(test_directory):
         print test_names
