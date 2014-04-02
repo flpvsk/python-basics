@@ -9,19 +9,20 @@ def main():
         conn, addr = server_sock.accept()
         print('Client connected from {}'.format(addr))
 
-    try:
+        try:
 
-        while True:
-            data = conn.recv(1024)
-            if not data:
-                break
+            while True:
+                data = conn.recv(1024)
+                if not data:
+                    break
 
-        print('Got data from {}'.format(addr))
-        conn.send('Got: {}'.format(data))
+            print('Got data from {}'.format(addr))
+            conn.send('Got: {}'.format(data))
 
-    finally:
-        print('Connection from {} closed'.format(addr))
-        conn.close()
+        finally:
+            print('Connection from {} closed'.format(addr))
+            conn.close()
+
     finally:
         server_sock.close()
 
