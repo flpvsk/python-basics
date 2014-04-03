@@ -7,8 +7,10 @@ Created on Mar 27, 2014
 
 class TestResult():
 
+    PASSED = 'passed'
+    FAILED = 'failed'
+
     def __init__(self, name, result, stack=''):
-        self.res = ['passed', 'failed']
         self._name = name
         self._result = result
         self._stack = stack
@@ -20,9 +22,9 @@ class TestResult():
         return self._result
 
     def stacktrace(self):
-        if self._result == self.res[1]:
+        if self._result == self.FAILED:
             return self._stack
         return ''
 
     def __str__(self):
-        print self._name
+        return '{0} is {1}\n{2}\n'.format(self._name, self._result, self._stack)
