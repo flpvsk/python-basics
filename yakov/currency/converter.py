@@ -1,14 +1,13 @@
 '''
 Created on Apr 3, 2014
 
-@author: Java Student
+@author: Java Studen
 '''
 import json
 import urllib2
 
 
 URL = 'http://andreysalomatin.me/exchange-rates?from={0}&to={1}'
-CURRENCIES = [('Ruble', 'rub', 'RUB'), ('Euro', 'eur', 'EUR'), ('Dollar', '$', 'USD')]
 
 
 class currency():
@@ -17,7 +16,7 @@ class currency():
         self._name = curr_tuple[0]
         self._symbol = curr_tuple[1]
         self._iso_code = curr_tuple[2]
-        self._rates = {cur[2]: self._get_rates(cur[2]) for cur in CURRENCIES}
+        self._rates = {cur._iso_code: self._get_rates(cur._iso_code) for cur in CURRENCIES}
 
     def __str__(self):
         return '{0} ({1})'.format(self._name, self._symbol)
@@ -42,3 +41,12 @@ class money():
 
     def __str__(self):
         return '{0} {1}'.format(self._amount, self._currency._symbol)
+
+
+RUB = currency(('Ruble', 'rub', 'RUB'))
+EUR = currency(('Euro', 'eur', 'EUR'))
+USD = currency(('Dollar', '$', 'USD'))
+CURRENCIES = [RUB, EUR, USD]
+
+def rubles(amount):
+    return money(amount, RUB)

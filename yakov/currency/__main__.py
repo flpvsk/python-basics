@@ -3,17 +3,13 @@ Created on Apr 3, 2014
 
 @author: Java Student
 '''
-from converter import currency
-from converter import money
-from converter import CURRENCIES
+from converter import *
 
 
 def main():
-    usd = currency(CURRENCIES[2])
-    rub = currency(CURRENCIES[0])
-    print usd._rates
-    dollars = money(10, usd)
-    print dollars.convert_to(rub)
+    print USD._rates
+    dollars_10 = money(10, USD)
+    print dollars_10.convert_to(RUB)
 
 if __name__ == '__main__':
     main()
