@@ -1,8 +1,10 @@
 #! /usr/bin/env python
 #encoding:UTF-8
+import urllib2
+import json
 
 class Money(object):
-    
+       
     def __init__(self, currency, amount):
         self._amount = amount
         self._currency = currency
@@ -19,44 +21,35 @@ class Money(object):
         return str(self.amount) + str(self.currency.symbol)
     
     def convert_to(self, new_currency):
-        return Money(Currency(new_currency), self.amount * self.currency.exchange_rate[new_currency])
+        return Money(new_currency, self.amount * self.currency.exchange_rate[new_currency.code])
+        #return Money(Currency(new_currency), self.amount * response['rate'])
     
     def __add__(self, cur2):
-        return Money(self.currency, self.amount + cur2.convert_to(self.currency.symbol).amount)
+        return Money(self.currency, self.amount + cur2.convert_to(self.currency).amount)
     
     def __sub__(self, cur2):
-        return Money(self.currency, self.amount - cur2.convert_to(self.currency.symbol).amount)
+        return Money(self.currency, self.amount - cur2.convert_to(self.currency).amount)
     
 class Currency(object):
     
-    RUBLE = "rub"
-    DOLLAR = "$"
-    EURO = "€"
+    RUB = "rub"
+    USD = "$"
+    EUR = "€"
+    CODES =["RUB", "USD", "EUR"]
+    RATES_URL = "http://andreysalomatin.me/exchange-rates?"
     
-    rates = {RUBLE: {DOLLAR: 1/35, EURO: 1/50,RUBLE: 1},
-             DOLLAR: {DOLLAR: 1, EURO: 0.8,RUBLE: 35},
-             EURO: {DOLLAR: 1.4, EURO: 1,RUBLE: 50}}
+    #rates = {RUB: {USD: 1/35, EUR: 1/50,RUB: 1},
+    ##         USD: {USD: 1, EUR: 0.8,RUB: 35},
+    #         EUR: {USD: 1.4, EUR: 1,RUB: 50}}
+    
     exchange_rate = {}
     
-    def __init__(self, symbol=DOLLAR):
+    def __init__(self, symbol=USD):
         self._symbol = symbol
-    
-    def rubles(self, amount):
-        self.exchange_rate = self.rates[self.RUBLE]
-        self._symbol = self.RUBLE
-        return Money(self, amount)
-    
-    
-    def dollars(self, amount):
-        self.exchange_rate = self.rates[self.DOLLAR]
-        self._symbol = self.DOLLAR
-        return Money(self, amount)
-    
-
-    def euros(self, amount):
-        self.exchange_rate = self.rates[self.EURO]
-        self._symbol = self.EURO
-        return Money(self, amount)
+        self.RATES_URL += "from=" + self.code + "&to="
+        #self.exchange_rate = {}
+        self.exchange_rate = {x: json.load(urllib2.urlopen(self.RATES_URL + x))["rate"]
+                               for x in self.CODES}
     
     @property
     def symbol(self):
@@ -64,33 +57,54 @@ class Currency(object):
     
     @property
     def name(self):
-        if self.symbol == self.RUBLE:
+        if self.symbol == self.RUB:
             return "Rubles"
-        elif self.symbol == self.DOLLAR:
+        elif self.symbol == self.USD:
             return "Dollars"
-        elif self.symbol == self.EURO:
+        elif self.symbol == self.EUR:
             return "Euros"
+    
+    @property
+    def code(self):
+        if self.symbol == self.RUB:
+            return "RUB"
+        elif self.symbol == self.USD:
+            return "USD"
+        elif self.symbol == self.EUR:
+            return "EUR"
     
     def __str__(self):
         return "{0} {1}".format(self.name, self.symbol)
 
 
+RUB = Currency("rub")
+USD = Currency("$")
+EUR = Currency("€")
+
+def rubles(amount):
+        return Money(RUB, amount)
+    
+def dollars( amount):
+    return Money(USD, amount)
+
+
+def euros( amount):
+    return Money(EUR, amount)
+
+
 
 if __name__ == "__main__":
-    cur =  Currency("rub")
-    print(str(cur))
-    r = cur.dollars(50)
+
+    r = dollars(50)
     print(str(r))
-    print (str(r.convert_to(cur.RUBLE)))
-    s1 = cur.rubles(1000)
-    print(str(s1))
+    print (str(r.convert_to(RUB)))
+       
+    s1 = rubles(1000)
+    s2 = euros(5)
+
+    print(s2)
+    print(s2 + s1)
+    print(s1 - s2)
     
     
-    cur =  Currency()
-    print(str(cur))
-    s2 = cur.euros(5)
-    print(str(cur))
-    print(str(s2))
-    print(str(s1 + s2))
-    print(str(s1 - s2))
     
