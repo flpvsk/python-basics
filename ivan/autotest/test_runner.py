@@ -39,7 +39,7 @@ class TestRunner(object):
                 print(i)
                 i()
             except Exception as er:
-                print("An error occurred: %r" % er)
+                print("An error occurred: %r %r" % (er, i.__name__))
                 self.failed_test_list.append(i)
             else:
                 self.passed_test_list.append(i)
