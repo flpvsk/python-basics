@@ -51,8 +51,10 @@ def prepare_tests_to_run():
 
 def execute_tests():
     run.run()
-    return len(run.failed_tests())
+    print 'Failed: {0}\nPassed: {1}\n'.format(len(run.failed_tests()), len(run.passed_tests()))
+    print 'FAILED details:'
+    [(sys.stdout.write(str(fld))) for fld in run.failed_tests()]
 
 
 prepare_tests_to_run()
-print execute_tests()
+execute_tests()

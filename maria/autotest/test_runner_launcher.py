@@ -1,9 +1,8 @@
 import importlib
 import sys
-from fail_reporter import FailReporter
-from verbose_reporter import VerboseReporter
-from text_file_reporter import TextFileReporter
 from test_runner import TestRunner
+from decorators import with_tear_down
+from decorators import with_set_up
 from utils import noop
 
 
@@ -17,12 +16,12 @@ class TestRunnerLauncher(object):
     FAIL_REPORTER = "fail"
     TEXT_FILE_REPORTER = "text_file"
 
-    test_reporters_dict = {VERBOSE_REPORTER:
-                           VerboseReporter,
+    test_runners_dict = {VERBOSE_REPORTER:
+                           TestRunner.with_verbose_reporter,
                            FAIL_REPORTER:
-                           FailReporter,
+                           TestRunner.with_fail_reporter,
                            TEXT_FILE_REPORTER:
-                           TextFileReporter}
+                           TestRunner.with_text_file_reporter}
 
     def __init__(self, test_module_name, test_container_type, test_reporter):
         '''Specifies test runner launcher
@@ -33,8 +32,7 @@ class TestRunnerLauncher(object):
         '''
         self.test_module = importlib.import_module(test_module_name)
         self.test_container_type = test_container_type
-        self.test_runner = TestRunner(
-                                    self.test_reporters_dict[test_reporter]())
+        self.test_runner = self.test_runners_dict[test_reporter]()
         self.test_extractors_dict = \
                 {self.TEST_FUNCTIONS_CONTAINER:
                  self.__extract_tests_from_module_functions,
@@ -47,7 +45,7 @@ class TestRunnerLauncher(object):
         for test_list in test_lists:
             [self.test_runner.add_test(test) for test in test_list]
             self.test_runner.run()
-        if len(self.test_runner.failed_tests()) != 0:
+        if len(self.test_runner.failed_tests) != 0:
             sys.exit(1)
         else:
             sys.exit(0)
@@ -78,42 +76,3 @@ class TestRunnerLauncher(object):
                 tear_down_method = getattr(test_class, method_name)
         return [with_tear_down(tear_down_method)
                 (with_set_up(set_up_method)(test)) for test in tests]
-
-
-def with_set_up(set_up_func):
-
-    def decorator(test):
-
-        def wrapper():
-            set_up_func()
-            test()
-
-        inherit_attrs(test, wrapper)
-        return wrapper
-
-    return decorator
-
-
-def with_tear_down(tear_down_func):
-
-    def decorator(test):
-
-        def wrapper():
-            try:
-                test()
-            finally:
-                tear_down_func()
-
-        inherit_attrs(test, wrapper)
-        return wrapper
-
-    return decorator
-
-
-def inherit_attrs(source, target):
-    inherited_attrs = ["__name__", "__module__", "im_class"]
-    for attr in inherited_attrs:
-            try:
-                setattr(target, attr, getattr(source, attr))
-            except:
-                pass

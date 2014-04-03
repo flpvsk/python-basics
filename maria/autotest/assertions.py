@@ -1,3 +1,7 @@
+from decorators import log
+
+
+@log
 def assert_equal(a, b, m="Expected value - {}, actual value- {}"):
     assert a == b, m.format(a, b)
 
