@@ -2,6 +2,8 @@
 #encoding:UTF-8
 import urllib2
 import json
+import os
+from datetime import datetime
 
 class Money(object):
        
@@ -37,6 +39,7 @@ class Currency(object):
     EUR = "€"
     CODES =["RUB", "USD", "EUR"]
     RATES_URL = "http://andreysalomatin.me/exchange-rates?"
+    LOG_DIR = "C:\\test-results\[{base}]-[{year}][{month}][{day}].txt"
     
     #rates = {RUB: {USD: 1/35, EUR: 1/50,RUB: 1},
     ##         USD: {USD: 1, EUR: 0.8,RUB: 35},
@@ -47,9 +50,23 @@ class Currency(object):
     def __init__(self, symbol=USD):
         self._symbol = symbol
         self.RATES_URL += "from=" + self.code + "&to="
-        #self.exchange_rate = {}
-        self.exchange_rate = {x: json.load(urllib2.urlopen(self.RATES_URL + x))["rate"]
+
+        self.LOG_DIR = self.LOG_DIR.format(base=self.name,
+                                           year=datetime.now().year,
+                                           month=datetime.now().month,
+                                           day=datetime.now().day)
+        
+        if not os.path.exists(os.path.dirname(self.LOG_DIR)):
+            os.makedirs(os.path.dirname(self.LOG_DIR))
+        
+        if not os.path.exists(self.LOG_DIR):
+            self.exchange_rate = {x: json.load(urllib2.urlopen(self.RATES_URL + x))["rate"]
                                for x in self.CODES}
+            with open(self.LOG_DIR, 'a') as file:
+                file.writelines(json.dumps(self.exchange_rate))
+        else:
+            with open(self.LOG_DIR, 'r') as file:
+                self.exchange_rate = json.load(file)
     
     @property
     def symbol(self):
