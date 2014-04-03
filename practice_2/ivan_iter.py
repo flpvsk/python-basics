@@ -8,16 +8,16 @@ def dividers(x):
     for i in xrange(1, x + 1):
         if x % i == 0:
             lst.append(i)
-    print lst
+    return lst
 print 'test dividers\n'
-dividers(10)
-dividers(100)
+print dividers(10)
+print dividers(100)
 
 def to_bool(lst):
     lst2 = []
     for i in lst:
         lst2.append(bool(i))
-    print lst2
+    return lst2
 print '\ntest to_bool\n'
-to_bool([0, 1, '', 'a'])
-to_bool(['i', -1, '%'])
+print to_bool([0, 1, '', 'a'])
+print to_bool(['i', -1, '%'])

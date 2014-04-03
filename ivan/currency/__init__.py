@@ -8,5 +8,7 @@ class Currency(object):
     def __str__(self):
         return self.name + self.symbol
 
+
 class Money(object):
     def __init__(self, amount, currency):
+        pass

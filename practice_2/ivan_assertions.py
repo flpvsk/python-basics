@@ -6,11 +6,10 @@ Created on 20 Mar 2014
 
 
 def assert_equal(a, b, message='not equal'):
-    if a == b:
-        print 'True because: \ra = %r\rb = %r' % (a, b)
-    else:
-        print 'False because: \ra = %r\rb = %r' % (a, b)
-        raise AssertionError(message)
+    try:
+        assert a == b, message
+    except:
+        AssertionError(message)
 
 
 #print 'assert_equal function tests: \n'
@@ -19,35 +18,30 @@ def assert_equal(a, b, message='not equal'):
 
 
 def assert_not_equal(a, b, message='equal'):
-    if a != b:
-        print 'True because: \ra = %i\rb = %i' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %i' % (a, b)
-
+    try:
+        assert a != b, message
+    except:
+        AssertionError(message)
 #print '\rassert_not_equal function tests: \n'
 #assert_not_equal(3, 5)
 #assert_not_equal(4, 4)
 
 
 def assert_true(x, message='false'):
-    if x == True:
-        print 'True because: \rx = %i' % (x)
-    else:
-        raise Exception
-        print 'False because: \rx = %i' % (x)
-
+    try:
+        assert x, message
+    except:
+        AssertionError(message)
 #print '\rassert_true function tests: \n'
 #assert_true(1)
 #assert_true(0)
 
 
 def assert_false(x, message='true'):
-    if x == False:
-        print 'True because: \rx = %i' % (x)
-    else:
-        raise Exception
-        print 'False because: \rx = %i' % (x)
+    try:
+        assert not x, message
+    except:
+        AssertionError(message)
 
 #print '\rassert_false function tests: \n'
 #assert_false(1)
@@ -55,11 +49,10 @@ def assert_false(x, message='true'):
 
 
 def assert_is(a, b, message=' is not'):
-    if a is b:
-        print 'True because: \ra = %i\rb = %i' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %i' % (a, b)
+    try:
+        assert a is b, message
+    except:
+        AssertionError(message)
 
 #print '\rassert_is function tests: \n'
 #assert_is(3, 5)
@@ -67,11 +60,10 @@ def assert_is(a, b, message=' is not'):
 
 
 def assert_is_not(a, b, message='is'):
-    if a is not b:
-        print 'True because: \ra = %i\rb = %i' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %i' % (a, b)
+    try:
+        assert a is not b, message
+    except:
+        AssertionError(message)
 
 #print '\rassert_is_not function tests: \n'
 #assert_is_not(3, 5)
@@ -79,11 +71,10 @@ def assert_is_not(a, b, message='is'):
 
 
 def assert_is_none(x, message='not None'):
-    if x is None:
-        print 'True because: \rx = %s\r' % (x)
-    else:
-        raise Exception
-        print 'False because: \rx = %i' % (x)
+    try:
+        assert x is None, message
+    except:
+        AssertionError(message)
 
 #print '\rassert_is_none function tests: \n'
 #assert_is_none(None)
@@ -91,23 +82,20 @@ def assert_is_none(x, message='not None'):
 
 
 def assert_is_not_none(x, message='None'):
-    if x is not None:
-        print 'True because: \rx = %i\r' % (x)
-    else:
-        raise Exception
-        print 'False because: \rx = %s' % (x)
-
+    try:
+        assert x is not None, message
+    except:
+        AssertionError(message)
 #print '\rassert_is_not_none function tests: \n'
 #assert_is_not_none(None)
 #assert_is_not_none(1)
 
 
 def assert_in(a, b, message='not in'):
-    if a in b:
-        print 'True because: \ra = %i\rb = %s' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %s' % (a, b)
+    try:
+        assert a in b, message
+    except:
+        AssertionError(message)
 
 #print '\rassert_in function tests: \n'
 #lst1 = [1, 2, 3, 4, 5]
@@ -117,14 +105,12 @@ def assert_in(a, b, message='not in'):
 
 
 def assert_not_in(a, b, message='in'):
-    if a not in b:
-        print 'True because: \ra = %i\rb = %s' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %s' % (a, b)
-
+    try:
+        assert a not in b, message
+    except:
+        AssertionError(message)
 #print '\rassert_not_in function tests: \n'
-lst1 = [1, 2, 3, 4, 5]
-lst2 = [3, 6, 8, 0]
+#lst1 = [1, 2, 3, 4, 5]
+#lst2 = [3, 6, 8, 0]
 #assert_not_in(3, lst1)
 #assert_not_in(5, lst2)
