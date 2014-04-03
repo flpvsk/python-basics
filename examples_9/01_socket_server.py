@@ -2,7 +2,7 @@ from socket import socket
 
 def main():
     server_sock = socket()
-    server_sock.bind(('', 8000))
+    server_sock.bind(('', 8001))
     server_sock.listen(1)
 
     try:
@@ -10,14 +10,18 @@ def main():
         print('Client connected from {}'.format(addr))
 
         try:
-
+            data = ''
             while True:
-                data = conn.recv(1024)
+                data += conn.recv(1024)
                 if not data:
                     break
 
+                if '\n' not in data:
+                    continue
+
                 print('Got data from {}'.format(addr))
                 conn.send('Got: {}'.format(data))
+                data = ''
 
         finally:
             print('Connection from {} closed'.format(addr))
