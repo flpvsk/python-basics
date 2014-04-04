@@ -1,8 +1,6 @@
 import urllib2
 import urllib
 import json
-from converter_entities import Currency
-from converter_entities import Money
 
 
 class StaticLoader(object):
@@ -19,35 +17,38 @@ class StaticLoader(object):
 
 
 class WebLoader(object):
-    RESOURCE_URL = "http://rate-exchange.appspot.com/currency?"
-    LOAD_CURRENCIES = ["RUB", "USD", "EUR"]
+    RESOURCE_URLS_POOL = ("http://rate-exchange.appspot.com/currency?",
+                         "http://andreysalomatin.me/exchange-rates?")
+    LOAD_CURRENCIES = ("RUB", "USD", "EUR")
 
     def load(self, currency_iso):
-        #exchange_rate_url = self.RESOURCE_URL + urllib.urlencode(
-        #    {'from': self.source_currency_iso, 'to': self.target_currency_iso})
-        #response = urllib2.urlopen(exchange_rate_url)
         exchange_rates = {}
         for target_currency_iso in self.LOAD_CURRENCIES:
-            json_string = '{"to": "' + target_currency_iso + '", "rate": 0.02051789999, "from": "' + currency_iso+'"}'
-            exchange_rate = json.loads(json_string)
-            exchange_rates.update({exchange_rate["to"]: exchange_rate["rate"]})
+            response = self._get_response(urllib.urlencode(
+                     {'from': currency_iso, 'to': target_currency_iso}))
+            try:
+                exchange_rate = json.loads(response.read())
+                exchange_rates.update(
+                     {exchange_rate["to"]: exchange_rate["rate"]})
+            except:
+                #Should write to log with level 'ERROR'
+                print "Impossible to load data for {} currency".format(
+                                                      target_currency_iso)
         return exchange_rates
 
-RUBLE = Currency("Rubles", "rub", "RUB", StaticLoader())
-DOLLAR = Currency("Dollar", "$", "USD", StaticLoader())
-EURO = Currency("Euro", "eur", "EUR", StaticLoader())
-
-
-def rubles(self, n):
-    return Money(n, self.RUBLE)
-
-
-def dollars(self, n):
-    return Money(n, self.DOLLAR)
-
-
-def euro(self, n):
-    return Money(n, self.EURO)
-
-
-print Currency("Rubles", "rub", "RUB", WebLoader())
+    def _get_response(self, arguments):
+        response = None
+        for resource_url in self.RESOURCE_URLS_POOL:
+            full_url = resource_url + arguments
+            try:
+                response = urllib2.urlopen(full_url)
+            except urllib2.HTTPError as e:
+                #Should write to log with level 'WARNING'
+                print "Resource {} is not available. Caught error: {}".format(
+                                                                full_url, e)
+                continue
+            else:
+                #Should write to log with level 'INFO'
+                print "Using data from resource: {}".format(full_url)
+                break
+        return response
