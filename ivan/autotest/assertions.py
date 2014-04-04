@@ -9,80 +9,40 @@ __all__ = ('assert_equal', 'assert_not_equal', 'assert_true', 'assert_false',
 
 
 def assert_equal(a, b, message='not equal'):
-    if a == b:
-        print 'True because: \ra = %i\rb = %i' % (a, b)
-    else:
-        print 'False because: \ra = %i\rb = %i' % (a, b)
-        raise Exception
+        assert a == b, message
 
 
 def assert_not_equal(a, b, message='equal'):
-    if a != b:
-        print 'True because: \ra = %i\rb = %i' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %i' % (a, b)
+        assert a != b, message
 
 
 def assert_true(x, message='false'):
-    if x == True:
-        print 'True because: \rx = %i' % (x)
-    else:
-        raise Exception
-        print 'False because: \rx = %i' % (x)
+        assert x, message
 
 
 def assert_false(x, message='true'):
-    if x == False:
-        print 'True because: \rx = %i' % (x)
-    else:
-        raise Exception
-        print 'False because: \rx = %i' % (x)
+        assert not x, message
 
 
 def assert_is(a, b, message=' is not'):
-    if a is b:
-        print 'True because: \ra = %i\rb = %i' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %i' % (a, b)
+        assert a is b, message
 
 
 def assert_is_not(a, b, message='is'):
-    if a is not b:
-        print 'True because: \ra = %i\rb = %i' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %i' % (a, b)
+        assert a is not b, message
 
 
 def assert_is_none(x, message='not None'):
-    if x is None:
-        print 'True because: \rx = %s\r' % (x)
-    else:
-        raise Exception
-        print 'False because: \rx = %i' % (x)
+        assert x is None, message
 
 
 def assert_is_not_none(x, message='None'):
-    if x is not None:
-        print 'True because: \rx = %i\r' % (x)
-    else:
-        raise Exception
-        print 'False because: \rx = %s' % (x)
+        assert x is not None, message
 
 
 def assert_in(a, b, message='not in'):
-    if a in b:
-        print 'True because: \ra = %i\rb = %s' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %s' % (a, b)
+        assert a in b, message
 
 
 def assert_not_in(a, b, message='in'):
-    if a not in b:
-        print 'True because: \ra = %i\rb = %s' % (a, b)
-    else:
-        raise Exception
-        print 'False because: \ra = %i\rb = %s' % (a, b)
+        assert a not in b, message

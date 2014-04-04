@@ -38,14 +38,13 @@ class TestRunner(object):
             try:
                 print(i)
                 i()
-            except AssertionError as er:
-                print("An error occurred: %r" % er)
+            except Exception as er:
+                print("An error occurred: %r %r" % (er, i.__name__))
                 self.failed_test_list.append(i)
             else:
                 self.passed_test_list.append(i)
             finally:
                 self.run_test_list.append(i)
-                self.pending_test_list.remove(i)
         return (len(self.run_test_list),
                 len(self.passed_test_list),
                 len(self.failed_test_list))

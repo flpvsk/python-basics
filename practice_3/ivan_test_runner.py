@@ -3,10 +3,7 @@ Created on Mar 13, 2014
 
 @author: Java Student
 '''
-global pending_test_list
-global failed_test_list
-global run_test_list
-global passed_test_list
+
 
 pending_test_list = []
 failed_test_list = []
@@ -26,12 +23,11 @@ def run():
     for i in pending_test_list:
         try:
             i()
-        except AssertionError as er:
+        except Exception as er:
             print("An error occurred: " + er)
             failed_test_list.append(i)
         finally:
             run_test_list.append(i)
-            pending_test_list.remove(i)
     return (len(run_test_list),
             len(passed_test_list),
             len(failed_test_list))
