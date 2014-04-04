@@ -1,6 +1,7 @@
 import urllib2
 import urllib
 import json
+from decorators import dump_result_to_file
 
 
 class StaticLoader(object):
@@ -21,15 +22,15 @@ class WebLoader(object):
                          "http://andreysalomatin.me/exchange-rates?")
     LOAD_CURRENCIES = ("RUB", "USD", "EUR")
 
+    @dump_result_to_file
     def load(self, currency_iso):
         exchange_rates = {}
         for target_currency_iso in self.LOAD_CURRENCIES:
-            response = self._get_response(urllib.urlencode(
-                     {'from': currency_iso, 'to': target_currency_iso}))
             try:
-                exchange_rate = json.loads(response.read())
+                exchange_rate = self._get_response(urllib.urlencode(
+                     {'from': currency_iso, 'to': target_currency_iso}))
                 exchange_rates.update(
-                     {exchange_rate["to"]: exchange_rate["rate"]})
+                     {str(exchange_rate["to"]): exchange_rate["rate"]})
             except:
                 #Should write to log with level 'ERROR'
                 print "Impossible to load data for {} currency".format(
@@ -37,7 +38,6 @@ class WebLoader(object):
         return exchange_rates
 
     def _get_response(self, arguments):
-        response = None
         for resource_url in self.RESOURCE_URLS_POOL:
             full_url = resource_url + arguments
             try:
@@ -51,4 +51,4 @@ class WebLoader(object):
                 #Should write to log with level 'INFO'
                 print "Using data from resource: {}".format(full_url)
                 break
-        return response
+        return json.loads(response.read())
