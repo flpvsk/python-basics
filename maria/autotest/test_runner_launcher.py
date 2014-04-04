@@ -7,6 +7,7 @@ from utils import noop
 
 
 class TestRunnerLauncher(object):
+    
     TEST_METHOD_PREFIX = "test_"
     SET_UP_METHOD_NAME = "set_up"
     TEAR_DOWN_METHOD_NAME = "tear_down"
