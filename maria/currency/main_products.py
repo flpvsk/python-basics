@@ -18,12 +18,3 @@ def dollars(n):
 
 def euro(n):
     return Money(n, EURO)
-
-
-hundred_rubles = rubles(100)
-print hundred_rubles + hundred_rubles
-print hundred_rubles.convert_to(DOLLAR)
-hundred_dollars = dollars(100)
-print hundred_dollars + hundred_rubles
-print hundred_dollars - hundred_rubles
-print hundred_rubles + hundred_dollars

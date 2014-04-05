@@ -1,7 +1,8 @@
 import urllib2
 import urllib
 import json
-from decorators import dump_result_to_file
+from dump_decorators import dump_new_data_to_file
+from dump_decorators import use_dumped_data
 
 
 class StaticLoader(object):
@@ -22,7 +23,8 @@ class WebLoader(object):
                          "http://andreysalomatin.me/exchange-rates?")
     LOAD_CURRENCIES = ("RUB", "USD", "EUR")
 
-    @dump_result_to_file
+    @use_dumped_data
+    @dump_new_data_to_file
     def load(self, currency_iso):
         exchange_rates = {}
         for target_currency_iso in self.LOAD_CURRENCIES:

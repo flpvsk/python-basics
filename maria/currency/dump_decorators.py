@@ -3,7 +3,7 @@ import json
 from datetime import date
 
 
-__all__ = ('dump_result_to_file', 'use_dump_data')
+__all__ = ('dump_result_to_file', 'use_dumped_data')
 
 BASE_DIR = "dumps"
 FILE_NAME_FORMAT = "{}-{}.json"
@@ -11,11 +11,11 @@ DEFAULT_FILE_NAME_FORMAT = "dump-{}.json"
 DATE_FORMAT = "%y%m%d"
 
 
-def use_dump_data(f):
+def use_dumped_data(f):
     def executor(*args, **kwargs):
         full_path = get_dump_file_full_path(args[1])
         if not os.path.exists(full_path):
-            return f()
+            return f(*args, **kwargs)
         else:
             with open(full_path) as dump_file:
                 #Should write to log with level 'INFO'
@@ -25,8 +25,7 @@ def use_dump_data(f):
     return executor
 
 
-@use_dump_data
-def dump_result_to_file(f):
+def dump_new_data_to_file(f):
     def executor(*args, **kwargs):
         if not os.path.exists(BASE_DIR):
             os.makedirs(BASE_DIR)
