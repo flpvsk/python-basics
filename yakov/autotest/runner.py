@@ -7,7 +7,7 @@ from test_result import TestResult
 import traceback
 
 
-class TestRunner():
+class TestRunnerBase():
     _PENDING = "pending"
     _PASSED = "passed" # Obsolete
     _FAILED = "failed" # Obsolete
@@ -31,11 +31,23 @@ class TestRunner():
     def pending_tests(self):
         return [func for func in self._tests.keys() if self._tests[func] == self._PENDING]
 
+# To override
+    def report_test_started(self, test_function):
+        pass
+
+# To override
+    def report_test_finished(self, test_result_object):
+        pass
+
+    def report_all_finished(self):
+        print 'Ran: {0}, Passed: {1}, Failed: {2}'.format(len(self.ran_tests()), len(self.passed_tests()), len(self.failed_tests()))
+
     def run(self):
         to_run = self.pending_tests()
         for tst in to_run:
             try:
                 self._TestClass.set_up()
+                self.report_test_started(tst)
                 tst()
             except:
                 self._tests[tst] = TestResult.FAILED
@@ -46,7 +58,9 @@ class TestRunner():
                 t = TestResult(tst, TestResult.PASSED)
                 self._test_res_list.append(t)
             finally:
+                self.report_test_finished(t)
                 self._TestClass.tear_down()
+        self.report_all_finished()
         return (len(self.ran_tests()), len(self.passed_tests()), len(self.failed_tests()))
 
     def ran_tests(self):
@@ -64,3 +78,21 @@ class TestRunner():
     def clear_state(self):
         self._tests.clear()
         self._test_res_list = []
+
+
+class TestRunnerVerboseReporting(TestRunnerBase):
+
+    def report_test_started(self, test_function):
+        print 'Executing: {0}'.format(test_function.__name__)
+
+    def report_test_finished(self, test_result):
+        print str(test_result)
+
+
+class TestRunnerFailReporting(TestRunnerBase):
+
+    def report_test_finished(self, test_result):
+        if test_result._result == test_result.PASSED:
+            print '.'
+        else:
+            print str(test_result)

@@ -5,10 +5,10 @@ Created on Mar 20, 2014
 '''
 import sys
 import importlib
-from yakov.autotest import TestRunner
+from yakov.autotest import TestRunnerVerboseReporting
 from examples_5.yakov_todo_test_class import TodoTestCases
 
-run = TestRunner(TodoTestCases)
+run = TestRunnerVerboseReporting(TodoTestCases)
 
 # True: run from CLI
 # False: run from Eclipse
@@ -51,9 +51,9 @@ def prepare_tests_to_run():
 
 def execute_tests():
     run.run()
-    print 'Failed: {0}\nPassed: {1}\n'.format(len(run.failed_tests()), len(run.passed_tests()))
-    print 'FAILED details:'
-    [(sys.stdout.write(str(fld))) for fld in run.failed_tests()]
+#    print 'Failed: {0}\nPassed: {1}\n'.format(len(run.failed_tests()), len(run.passed_tests()))
+#    print 'FAILED details:'
+#    [(sys.stdout.write(str(fld))) for fld in run.failed_tests()]
 
 
 prepare_tests_to_run()
