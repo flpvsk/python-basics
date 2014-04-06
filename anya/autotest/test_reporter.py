@@ -22,7 +22,7 @@ class TextFileReporter():
         
         
     def report_test_finished(self, test, status, test_result):
-        self.report.write("{},{},{}".format(test_result.test_name, status, test_result.stack_trace))
+        self.report.write("{},{},{};\n".format(test_result.test_name, status, test_result.stack_trace))
         
         
     def report_all_finished(self, test, run_tests, passed_tests, failed_tests):
