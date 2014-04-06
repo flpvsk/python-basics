@@ -33,15 +33,15 @@ def with_tear_down(tear_down_func):
 
 def log(f):
     def func_descriptor(*args, **kwargs):
-        print "'{}.{}' was called with arguments: {}\n".format(
+        print "'{}.{}' was called with arguments: {}".format(
                             f.__module__, f.__name__, args, kwargs)
         try:
             result = f(*args, **kwargs)
         except BaseException as e:
-            print "Function failed with exception: {}\n".format(e.message)
+            print "Function failed with exception: {}".format(e.message)
             raise e
         else:
-            print "Function returned value: {}\n".format(result)
+            print "Function returned value: {}".format(result)
             return result
 
     return func_descriptor

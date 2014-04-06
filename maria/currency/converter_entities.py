@@ -1,9 +1,10 @@
 class Currency(object):
 
-    def __init__(self, name, symbol, exchange_rates={}):
+    def __init__(self, name, symbol, iso_code, exchange_rates_loader):
         self._name = name
         self._symbol = symbol
-        self._exchange_rates = exchange_rates
+        self._iso_code = iso_code
+        self._exchange_rates = exchange_rates_loader.load(iso_code)
 
     @property
     def name(self):
@@ -12,6 +13,10 @@ class Currency(object):
     @property
     def symbol(self):
         return self._symbol
+
+    @property
+    def iso_code(self):
+        return self._iso_code
 
     @property
     def exchange_rates(self):
@@ -37,7 +42,7 @@ class Money(object):
 
     def convert_to(self, target_currency):
         return Money(self.amount *
-                     self.currency.exchange_rates[target_currency.name],
+                     self.currency.exchange_rates[target_currency.iso_code],
                      target_currency)
 
     def __add__(self, other):
