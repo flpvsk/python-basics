@@ -1,6 +1,7 @@
 import urllib2
 import urllib
 import json
+import sqlite3
 from dump_decorators import dump_new_data_to_file
 from dump_decorators import use_dumped_data
 
@@ -54,3 +55,30 @@ class WebLoader(object):
                 print "Using data from resource: {}".format(full_url)
                 break
         return json.loads(response.read())
+
+
+class DBLoader(object):
+    DB_NAME = "rates.db"
+    
+    def __init__(self, currency_iso=""):
+        self.currency_iso = currency_iso
+        
+    def load(self, currency_iso):
+        exchange_rates = {}
+        with sqlite3.connect(self.DB_NAME) as connection:
+            connection.row_factory = sqlite3.Row
+            for row in connection.execute('SELECT * from rates where "from" = ?',
+                           (currency_iso, )):
+                exchange_rates.update({row["to"]: row["rate"]})
+        return exchange_rates
+    
+    def __getitem__(self, target_currency_iso):
+        with sqlite3.connect(self.DB_NAME) as connection:
+            connection.row_factory = sqlite3.Row
+            rate_row = connection.execute('SELECT * from rates where "from" = ? and "to" = ?',
+                           (self.currency_iso, target_currency_iso)).fetchone()
+            return rate_row["rate"]
+
+    
+    
+    
