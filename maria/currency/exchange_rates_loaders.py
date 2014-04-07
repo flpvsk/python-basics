@@ -6,7 +6,8 @@ import sqlite3
 from dump_decorators import with_data_dumping
 
 
-__all__ = ('StaticLoader', 'WebLoader', 'FallbackLoader', 'loader_instance')
+__all__ = ('StaticLoader', 'WebLoader', 'FallbackLoader', 'DBLoader',
+           'loader_instance')
 
 logging.basicConfig(filename='converter.log', level=logging.INFO)
 
@@ -62,30 +63,49 @@ class FallbackLoader(object):
         raise ValueError('Currency iso code {} was not found'.format(
                                                             currency_iso))
 
-rate_exchage_loader = WebLoader("http://rate-exchange.appspot.com/currency?")
-mirror_loader = WebLoader("http://andreysalomatin.me/exchange-rates?")
-loader_instance = FallbackLoader(rate_exchage_loader, mirror_loader)
-
 
 class DBLoader(object):
-    DB_NAME = "rates.db"
-    
-    def __init__(self, currency_iso=""):
+
+    def __init__(self, currency_iso="", conn_string="rates.db"):
         self.currency_iso = currency_iso
-        
+        self.conn_string = conn_string
+
     def load(self, currency_iso):
         exchange_rates = {}
-        with sqlite3.connect(self.DB_NAME) as connection:
+        with sqlite3.connect(self.conn_string) as connection:
             connection.row_factory = sqlite3.Row
-            for row in connection.execute('SELECT * from rates where "from" = ?',
+            for row in connection.execute(
+                           'SELECT * from rates where "from" = ?',
                            (currency_iso, )):
                 exchange_rates.update({row["to"]: row["rate"]})
         return exchange_rates
-    
+
     def __getitem__(self, target_currency_iso):
-        with sqlite3.connect(self.DB_NAME) as connection:
+        with sqlite3.connect(self.conn_string) as connection:
             connection.row_factory = sqlite3.Row
-            rate_row = connection.execute('SELECT * from rates where "from" = ? and "to" = ?',
+            rate_row = connection.execute(
+                           'SELECT * from rates where "from" = ? and "to" = ?',
                            (self.currency_iso, target_currency_iso)).fetchone()
             return rate_row["rate"]
 
+    def __setitem__(self, target_currency_iso, rate):
+        with sqlite3.connect(self.conn_string) as connection:
+            connection.row_factory = sqlite3.Row
+            rate_row = connection.execute(
+                          'SELECT * from rates where "from" = ? and "to" = ?',
+                          (self.currency_iso, target_currency_iso)).fetchone()
+            if rate_row:
+                connection.execute(
+                       'UPDATE rates SET rate=? where "from" = ? and "to" = ?',
+                       (rate, self.currency_iso, target_currency_iso))
+            else:
+                connection.execute('INSERT INTO rates VALUES (?, ?, ?)',
+                         (self.currency_iso, target_currency_iso, rate))
+
+
+web_rate_loader = WebLoader(
+                            "http://rate-exchange.appspot.com/currency?")
+web_mirror_loader = WebLoader("http://andreysalomatin.me/exchange-rates?")
+db_rate_loader = DBLoader(conn_string="rates.db")
+loader_instance = FallbackLoader(db_rate_loader, web_rate_loader,
+                                 web_mirror_loader)
