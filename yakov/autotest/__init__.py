@@ -1,2 +1,2 @@
-from runner import TestRunner
+from runner import *
 import assertions
