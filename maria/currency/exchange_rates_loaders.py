@@ -1,8 +1,13 @@
 import urllib2
 import urllib
 import json
-from dump_decorators import dump_new_data_to_file
-from dump_decorators import use_dumped_data
+import logging
+from dump_decorators import with_data_dumping
+
+
+__all__ = ('StaticLoader', 'WebLoader', 'FallbackLoader', 'loader_instance')
+
+logging.basicConfig(filename='converter.log', level=logging.INFO)
 
 
 class StaticLoader(object):
@@ -23,34 +28,39 @@ class WebLoader(object):
                          "http://andreysalomatin.me/exchange-rates?")
     LOAD_CURRENCIES = ("RUB", "USD", "EUR")
 
-    @use_dumped_data
-    @dump_new_data_to_file
+    def __init__(self, resource_url):
+        self.resource_url = resource_url
+
+    @with_data_dumping
     def load(self, currency_iso):
         exchange_rates = {}
         for target_currency_iso in self.LOAD_CURRENCIES:
-            try:
-                exchange_rate = self._get_response(urllib.urlencode(
-                     {'from': currency_iso, 'to': target_currency_iso}))
-                exchange_rates.update(
-                     {str(exchange_rate["to"]): exchange_rate["rate"]})
-            except:
-                #Should write to log with level 'ERROR'
-                print "Impossible to load data for {} currency".format(
-                                                      target_currency_iso)
+            arguments = urllib.urlencode({
+                                'from': currency_iso,
+                                'to': target_currency_iso})
+            full_url = self.resource_url + arguments
+            response = urllib2.urlopen(full_url)
+            rate_json = json.loads(response.read())
+            exchange_rates[target_currency_iso] = rate_json["rate"]
         return exchange_rates
 
-    def _get_response(self, arguments):
-        for resource_url in self.RESOURCE_URLS_POOL:
-            full_url = resource_url + arguments
+
+class FallbackLoader(object):
+    LOG = logging.getLogger('FallbackLoader')
+
+    def __init__(self, *args):
+        self.loaders = args
+
+    def load(self, currency_iso):
+        'Try all loaders in order, return first successful result.'
+        for loader in self.loaders:
             try:
-                response = urllib2.urlopen(full_url)
-            except urllib2.HTTPError as e:
-                #Should write to log with level 'WARNING'
-                print "Resource {} is not available. Caught error: {}".format(
-                                                                full_url, e)
-                continue
-            else:
-                #Should write to log with level 'INFO'
-                print "Using data from resource: {}".format(full_url)
-                break
-        return json.loads(response.read())
+                return loader.load(currency_iso)
+            except:
+                self.LOG.warning('Loader `%s` failed', loader.__name__)
+        raise ValueError('Currency iso code {} was not found'.format(
+                                                            currency_iso))
+
+rate_exchage_loader = WebLoader("http://rate-exchange.appspot.com/currency?")
+mirror_loader = WebLoader("http://andreysalomatin.me/exchange-rates?")
+loader_instance = FallbackLoader(rate_exchage_loader, mirror_loader)

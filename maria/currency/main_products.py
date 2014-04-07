@@ -1,11 +1,11 @@
 from converter_entities import Currency
 from converter_entities import Money
-from exchange_rates_loaders import WebLoader
+from exchange_rates_loaders import loader_instance
 
 
-RUBLE = Currency("Rubles", "rub", "RUB", WebLoader())
-DOLLAR = Currency("Dollar", "$", "USD", WebLoader())
-EURO = Currency("Euro", "eur", "EUR", WebLoader())
+RUBLE = Currency("Rubles", "rub", "RUB", loader_instance)
+DOLLAR = Currency("Dollar", "$", "USD", loader_instance)
+EURO = Currency("Euro", "eur", "EUR", loader_instance)
 
 
 def rubles(n):
