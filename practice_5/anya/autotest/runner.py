@@ -99,7 +99,7 @@ class TestCase():
 
 
     def test_2(self):
-        print "Test2"
+        raise Exception
 
 
     def test_1(self):
