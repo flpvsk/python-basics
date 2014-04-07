@@ -2,6 +2,7 @@ import urllib2
 import urllib
 import json
 import logging
+import sqlite3
 from dump_decorators import with_data_dumping
 
 
@@ -64,3 +65,27 @@ class FallbackLoader(object):
 rate_exchage_loader = WebLoader("http://rate-exchange.appspot.com/currency?")
 mirror_loader = WebLoader("http://andreysalomatin.me/exchange-rates?")
 loader_instance = FallbackLoader(rate_exchage_loader, mirror_loader)
+
+
+class DBLoader(object):
+    DB_NAME = "rates.db"
+    
+    def __init__(self, currency_iso=""):
+        self.currency_iso = currency_iso
+        
+    def load(self, currency_iso):
+        exchange_rates = {}
+        with sqlite3.connect(self.DB_NAME) as connection:
+            connection.row_factory = sqlite3.Row
+            for row in connection.execute('SELECT * from rates where "from" = ?',
+                           (currency_iso, )):
+                exchange_rates.update({row["to"]: row["rate"]})
+        return exchange_rates
+    
+    def __getitem__(self, target_currency_iso):
+        with sqlite3.connect(self.DB_NAME) as connection:
+            connection.row_factory = sqlite3.Row
+            rate_row = connection.execute('SELECT * from rates where "from" = ? and "to" = ?',
+                           (self.currency_iso, target_currency_iso)).fetchone()
+            return rate_row["rate"]
+
