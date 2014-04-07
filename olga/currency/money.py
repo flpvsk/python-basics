@@ -110,7 +110,7 @@ def euros( amount):
     return Money(EUR, amount)
 
 
-class StoredRates(object):
+class StoredRates(dict):
     
     def __init__(self, key):
         self._code = key
@@ -118,31 +118,30 @@ class StoredRates(object):
             cursor = connection.cursor()
             cursor.execute('SELECT "to", "rate" FROM "rates" WHERE "from" = :code', {"code": key})
             rates = cursor.fetchall()
-            self._rates = {row[0]: row[1] for row in rates}
-            #print self._rates
+            self.update({row[0]: row[1] for row in rates})
+            #print self
     
     def __getitem__(self, key):
-        if self._rates.has_key(key):
-            return self._rates[key]
+        if self.has_key(key):
+            return super( StoredRates, self).__getitem__(key)
         return None
     
     def __setitem__(self, key, value):
-        if self._rates.has_key(key):
-            if self._rates[key] == value:
-                return self._rates[key]
+        if self.has_key(key):
+            if self[key] == value:
+                return self[key]
             else:
                 with sqlite3.connect("rates.db") as connection:
                     cursor = connection.cursor()
                     cursor.execute('UPDATE "rates" SET "rate" = :value WHERE "from" = :from  and "to" = :to',
                                    {"from": self._code, "to": key, "value": value})
-                self._rates[key] = value
+                super( StoredRates, self).__setitem__(key, value)
         else:
             with sqlite3.connect("rates.db") as connection:
                 cursor = connection.cursor()
                 cursor.execute('INSERT INTO "rates" ("from", "to", "rate") values (:from, :to, :value)',
                                {"from": self._code, "to": key, "value": value})
-                self._rates[key] = value
-                #self.__getitem__(key)
+                super(StoredRates, self).__setitem__(key, value)
         
     
 
@@ -161,8 +160,8 @@ if __name__ == "__main__":
     
     c = StoredRates("RUB")
     print(c["USD"])
-    print(c["JPY"])
-    c["JPY"] = 0.5
+    print(c["JP"])
+    c["JP"] = 0.6
     
     
     
