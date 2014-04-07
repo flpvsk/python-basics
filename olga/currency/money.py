@@ -4,6 +4,7 @@ import urllib2
 import json
 import os
 from datetime import datetime
+import sqlite3
 
 class Money(object):
        
@@ -62,11 +63,11 @@ class Currency(object):
         if not os.path.exists(self.LOG_DIR):
             self.exchange_rate = {x: json.load(urllib2.urlopen(self.RATES_URL + x))["rate"]
                                for x in self.CODES}
-            with open(self.LOG_DIR, 'a') as file:
-                file.writelines(json.dumps(self.exchange_rate))
+            with open(self.LOG_DIR, 'a') as fil:
+                fil.writelines(json.dumps(self.exchange_rate))
         else:
-            with open(self.LOG_DIR, 'r') as file:
-                self.exchange_rate = json.load(file)
+            with open(self.LOG_DIR, 'r') as fil:
+                self.exchange_rate = json.load(fil)
     
     @property
     def symbol(self):
@@ -109,6 +110,24 @@ def euros( amount):
     return Money(EUR, amount)
 
 
+class StoredRates(object):
+    
+    def __init__(self, code):
+        with sqlite3.connect("rates.db") as connection:
+            cursor = connection.cursor()
+            connection.row_factory = sqlite3.Row
+            cursor.execute('SELECT "to", "rate" FROM "rates" where "from" = :code', {"code": code})
+            rates = cursor.fetchall()
+            self._rates = {row[0]: row[1] for row in rates}
+            #print self._rates
+    
+    def __getitem__(self, key):
+        if self._rates.has_key(key):
+            return self._rates[key]
+        return None
+    
+    def __setitem__(self, key, value):
+        self._rates[key] = value
 
 if __name__ == "__main__":
 
@@ -122,6 +141,9 @@ if __name__ == "__main__":
     print(s2)
     print(s2 + s1)
     print(s1 - s2)
+    
+    c = StoredRates("RUB")
+    print(c["USD"])
     
     
     
