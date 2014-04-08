@@ -1,9 +1,10 @@
 import os
 import json
+import logging
 from datetime import date
 
 
-__all__ = ('dump_result_to_file', 'use_dumped_data')
+__all__ = ('with_data_dumping', )
 
 BASE_DIR = "dumps"
 FILE_NAME_FORMAT = "{}-{}.json"
@@ -11,36 +12,30 @@ DEFAULT_FILE_NAME_FORMAT = "dump-{}.json"
 DATE_FORMAT = "%y%m%d"
 
 
-def use_dumped_data(f):
+logging.basicConfig(filename='converter.log', level=logging.INFO)
+
+
+def with_data_dumping(f):
+    LOG = logging.getLogger('DumpFunction')
+
     def executor(*args, **kwargs):
         full_path = get_dump_file_full_path(args[1])
-        if not os.path.exists(full_path):
-            return f(*args, **kwargs)
-        else:
+        if os.path.exists(full_path):
             with open(full_path) as dump_file:
-                #Should write to log with level 'INFO'
-                print "Loading data from dump file {}".format(full_path)
+                LOG.info("Loading data from dump file {}".format(full_path))
                 return json.load(dump_file)
-
-    return executor
-
-
-def dump_new_data_to_file(f):
-    def executor(*args, **kwargs):
-        if not os.path.exists(BASE_DIR):
-            os.makedirs(BASE_DIR)
-        data = f(*args, **kwargs)
-        full_path = get_dump_file_full_path(args[1])
-        if not os.path.exists(full_path):
+        else:
+            if not os.path.exists(BASE_DIR):
+                os.makedirs(BASE_DIR)
+            data = f(*args, **kwargs)
             try:
                 with open(full_path, 'w+') as dump_file:
                     dump_file.write(str(data).replace('\'', '\"'))
             except BaseException as e:
-                #Should write to log with level 'WARNING'
-                print "Data dump to file failed. Exception: {}".format(e)
+                LOG.warning("Data dump to file failed. Exception: {}".
+                                                                 format(e))
             else:
-                #Should write to log with level 'INFO'
-                print "Data was saved to file {}".format(full_path)
+                LOG.info("Data was saved to file {}".format(full_path))
 
         return data
 
