@@ -103,8 +103,7 @@ class DBLoader(object):
                          (self.currency_iso, target_currency_iso, rate))
 
 
-web_rate_loader = WebLoader(
-                            "http://rate-exchange.appspot.com/currency?")
+web_rate_loader = WebLoader("http://rate-exchange.appspot.com/currency?")
 web_mirror_loader = WebLoader("http://andreysalomatin.me/exchange-rates?")
 db_rate_loader = DBLoader(conn_string="rates.db")
 loader_instance = FallbackLoader(db_rate_loader, web_rate_loader,
