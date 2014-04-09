@@ -39,12 +39,12 @@ class StoredRates(object):
                 VALUES (?, ?, ?)''', (self.from_currency, to_currency, value))
             connection.commit()
 
-rub_rates = StoredRates('RUB')
-print rub_rates['USD']
-rub_rates['JPY'] = 1
-print rub_rates['JPY']
-rub_rates['USD'] = 0.0028
-print rub_rates['USD']
-rub_rates['USD'] = 0.028
+#rub_rates = StoredRates('RUB')
+#print rub_rates['USD']
+#rub_rates['JPY'] = 1
+#print rub_rates['JPY']
+#rub_rates['USD'] = 0.0028
+#print rub_rates['USD']
+#rub_rates['USD'] = 0.028
 #eur_rates = StoredRates('EUR')
 #print eur_rates['RUB']

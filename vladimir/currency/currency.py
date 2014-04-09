@@ -28,14 +28,17 @@ class Currency (object):
             url = API_URL.format(self.iso_code, i)
             response = urllib2.urlopen(url)
             issues_json = json.loads(response.read())
-            self.rate[issues_json["to"]] = issues_json["rate"]
-            print self.symbol, str(issues_json)
 
-    def __str__(self):
+            self.rate[issues_json["to"]] = issues_json["rate"]
+           # print self.symbol, str(issues_json)
+
+
+
+    def __str__ (self):
         return self.symbol
 
 
-class CurrencyStored(Currency):
+class CurrencyStored (Currency):
     def __init__(self, symbol, name, iso_code):
         self.symbol = symbol
         self.name = name
@@ -74,33 +77,33 @@ class Money (object):
 #EURO = Currency("€", "Euro", "EUR")
 #DOLLAR = Currency("$", "Dollar", "USD")
 
-RUBLE = CurrencyStored("rub", "Ruble", "RUB")
-EURO = CurrencyStored("€", "Euro", "EUR")
-DOLLAR = CurrencyStored("$", "Dollar", "USD")
+#RUBLE = CurrencyStored("rub", "Ruble", "RUB")
+#EURO = CurrencyStored("€", "Euro", "EUR")
+#DOLLAR = CurrencyStored("$", "Dollar", "USD")
 
-def rubles(amount):
-    return Money(amount, RUBLE)
-
-
-def euros(amount):
-    return Money(amount, EURO)
+#def rubles(amount):
+#    return Money(amount, RUBLE)
 
 
-def dollars(amount):
-    return Money(amount, DOLLAR)
+#def euros(amount):
+#    return Money(amount, EURO)
 
 
-three_rubles = rubles(3)
+#def dollars(amount):
+#    return Money(amount, DOLLAR)
 
-three_rubles_in_dollars = three_rubles.convert_to(DOLLAR)
-print three_rubles_in_dollars.amount
 
-result_in_rubles = euros(100) + dollars(2)
-print result_in_rubles
-result_in_rubles = dollars(100) - euros(2)
-print result_in_rubles
+#three_rubles = rubles(3)
 
-now = datetime.date.today()
-print now.year
-print now.month
-print now.day
+#three_rubles_in_dollars = three_rubles.convert_to(DOLLAR)
+#print three_rubles_in_dollars.amount
+
+#result_in_rubles = euros(100) + dollars(2)
+#print result_in_rubles
+#result_in_rubles = dollars(100) - euros(2)
+#print result_in_rubles
+
+#now = datetime.date.today()
+#print now.year
+#print now.month
+#print now.day
