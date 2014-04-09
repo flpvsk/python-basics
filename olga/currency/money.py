@@ -4,6 +4,7 @@ import urllib2
 import json
 import os
 from datetime import datetime
+import sqlite3
 
 class Money(object):
        
@@ -36,7 +37,7 @@ class Currency(object):
     
     RUB = "rub"
     USD = "$"
-    EUR = "€"
+    EUR = "в‚¬"
     CODES =["RUB", "USD", "EUR"]
     RATES_URL = "http://andreysalomatin.me/exchange-rates?"
     LOG_DIR = "C:\\test-results\[{base}]-[{year}][{month}][{day}].txt"
@@ -62,11 +63,11 @@ class Currency(object):
         if not os.path.exists(self.LOG_DIR):
             self.exchange_rate = {x: json.load(urllib2.urlopen(self.RATES_URL + x))["rate"]
                                for x in self.CODES}
-            with open(self.LOG_DIR, 'a') as file:
-                file.writelines(json.dumps(self.exchange_rate))
+            with open(self.LOG_DIR, 'a') as fil:
+                fil.writelines(json.dumps(self.exchange_rate))
         else:
-            with open(self.LOG_DIR, 'r') as file:
-                self.exchange_rate = json.load(file)
+            with open(self.LOG_DIR, 'r') as fil:
+                self.exchange_rate = json.load(fil)
     
     @property
     def symbol(self):
@@ -96,7 +97,7 @@ class Currency(object):
 
 RUB = Currency("rub")
 USD = Currency("$")
-EUR = Currency("€")
+EUR = Currency("в‚¬")
 
 def rubles(amount):
         return Money(RUB, amount)
@@ -109,6 +110,40 @@ def euros( amount):
     return Money(EUR, amount)
 
 
+class StoredRates(dict):
+    
+    def __init__(self, key):
+        self._code = key
+        with sqlite3.connect("rates.db") as connection:
+            cursor = connection.cursor()
+            cursor.execute('SELECT "to", "rate" FROM "rates" WHERE "from" = :code', {"code": key})
+            rates = cursor.fetchall()
+            self.update({row[0]: row[1] for row in rates})
+            #print self
+    
+    def __getitem__(self, key):
+        if self.has_key(key):
+            return super( StoredRates, self).__getitem__(key)
+        return None
+    
+    def __setitem__(self, key, value):
+        if self.has_key(key):
+            if self[key] == value:
+                return self[key]
+            else:
+                with sqlite3.connect("rates.db") as connection:
+                    cursor = connection.cursor()
+                    cursor.execute('UPDATE "rates" SET "rate" = :value WHERE "from" = :from  and "to" = :to',
+                                   {"from": self._code, "to": key, "value": value})
+                super( StoredRates, self).__setitem__(key, value)
+        else:
+            with sqlite3.connect("rates.db") as connection:
+                cursor = connection.cursor()
+                cursor.execute('INSERT INTO "rates" ("from", "to", "rate") values (:from, :to, :value)',
+                               {"from": self._code, "to": key, "value": value})
+                super(StoredRates, self).__setitem__(key, value)
+        
+    
 
 if __name__ == "__main__":
 
@@ -122,6 +157,12 @@ if __name__ == "__main__":
     print(s2)
     print(s2 + s1)
     print(s1 - s2)
+    
+    c = StoredRates("RUB")
+    print(c["USD"])
+    print(c["JP"])
+    c["JP"] = 0.6
+    
     
     
     
