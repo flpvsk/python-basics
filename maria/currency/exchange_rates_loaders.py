@@ -3,11 +3,12 @@ import urllib
 import json
 import logging
 import sqlite3
+import config
 from dump_decorators import with_data_dumping
 
 
 __all__ = ('StaticLoader', 'WebLoader', 'FallbackLoader', 'DBLoader',
-           'loader_instance')
+           'default_loader')
 
 logging.basicConfig(filename='converter.log', level=logging.INFO)
 
@@ -26,17 +27,14 @@ class StaticLoader(object):
 
 
 class WebLoader(object):
-    RESOURCE_URLS_POOL = ("http://rate-exchange.appspot.com/currency?",
-                         "http://andreysalomatin.me/exchange-rates?")
-    LOAD_CURRENCIES = ("RUB", "USD", "EUR")
 
-    def __init__(self, resource_url):
+    def __init__(self, resource_url=config.MAIN_WEB_RESOURCE_URL):
         self.resource_url = resource_url
 
     @with_data_dumping
     def load(self, currency_iso):
         exchange_rates = {}
-        for target_currency_iso in self.LOAD_CURRENCIES:
+        for target_currency_iso in config.LOAD_CURRENCIES:
             arguments = urllib.urlencode({
                                 'from': currency_iso,
                                 'to': target_currency_iso})
@@ -66,7 +64,7 @@ class FallbackLoader(object):
 
 class DBLoader(object):
 
-    def __init__(self, currency_iso="", conn_string="rates.db"):
+    def __init__(self, currency_iso="", conn_string=config.MAIN_DB_CONN_STR):
         self.currency_iso = currency_iso
         self.conn_string = conn_string
 
@@ -103,8 +101,8 @@ class DBLoader(object):
                          (self.currency_iso, target_currency_iso, rate))
 
 
-web_rate_loader = WebLoader("http://rate-exchange.appspot.com/currency?")
-web_mirror_loader = WebLoader("http://andreysalomatin.me/exchange-rates?")
-db_rate_loader = DBLoader(conn_string="rates.db")
-loader_instance = FallbackLoader(db_rate_loader, web_rate_loader,
+web_rate_loader = WebLoader()
+web_mirror_loader = WebLoader(config.MIRROR_WEB_RESOURCE_URL)
+db_rate_loader = DBLoader()
+default_loader = FallbackLoader(db_rate_loader, web_rate_loader,
                                  web_mirror_loader)
