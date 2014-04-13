@@ -11,10 +11,9 @@ def log1(f):
         try: 
             print ('{}{}'.format(f.__name__, args, kwargs)) 
             result = f(*args, **kwargs) 
-        except Exception as e: 
-            print ('Function has failed with Exception {}'.format(e.message)) 
-        finally: 
             print ('returns {}'.format(result)) 
+        except Exception: 
+            raise Exception
     return wrapper 
 
 
@@ -22,15 +21,17 @@ def log1(f):
 
 @log1 
 def assert_equal(a, b): 
-    #assert a == b 
-    raise Exception 
-
+    assert a==b 
 
 @log1 
 def args_sum(*args, **kwargs): 
     return sum(kwargs.values()) + sum(args) 
 
 
-args_sum(1,2) 
-assert_equal(1, 1) 
+args_sum(2,3)
 
+
+try:
+    assert_equal(1, 2)
+except AssertionError as e:
+    print ('1!=2: %r' % e.message)
