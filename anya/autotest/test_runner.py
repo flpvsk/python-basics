@@ -87,26 +87,15 @@ class TestRunner():
                 self.reporter.report_test_started(test, test.__name__)
                 test()
                 test_result = TestResult(test, TestRunner._PASSED,)
-                #test_result_lst = [test_result.test_name, test_result.test_result, test_result.stack_trace]
-                #self.test_result_lst.append([test_result.test_name, test_result.test_result, test_result.stack_trace])
                 self.test_result_lst.append(test_result)
                 self.reporter.report_test_finished(test, TestRunner._PASSED, test_result)
-#                self.reporter.report_test_passed(i)
+                tear_down()
             except:
                 test_result = TestResult(test, TestRunner._FAILED, traceback.format_exc())
                 self.test_result_lst.append(test_result)
-                self.reporter.report_test_finished(test, TestRunner._FAILED, test_result)
-#                self.reporter.report_test_failed(i)                
+                self.reporter.report_test_finished(test, TestRunner._FAILED, test_result)             
             finally:
-                self.run_lst.append(i)
-                try:
-                    tear_down()
-                except:
-                    test_result = TestResult(test, TestRunner._FAILED, traceback.format_exc())
-                    self.test_result_lst.append(test_result)
-                    self.reporter.report_test_finished(test, TestRunner._FAILED, test_result)
-                    
-                    
+                self.run_lst.append(i)                    
         run_tests=len(self.run_tests())
         passed_tests=len(self.passed_tests())
         failed_tests=len(self.failed_tests())
