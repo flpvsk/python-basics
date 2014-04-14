@@ -1,7 +1,8 @@
 #from console_tests import *
 #import console_tests
-#cmd example C:\Users\Olga\git\python-basics>C:\Python27\python -m olga olga.console_tests
-from runner import runner
+#cmd example C:\Users\Olga\git\python-basics>C:\Python27\python -m olga olga.autotest.console_tests
+# result echo %errorlevel%
+from olga.autotest import runner
 import sys
 if len(sys.argv) > 1:
     #imports cmd arg as module
@@ -16,8 +17,10 @@ if len(sys.argv) > 1:
     test_runner.run()
     #return result
     if test_runner.failed_tests():
-        print(1)
+        #print(1)
+        sys.exit(1)
     else:
-        print(0)
+        #print(0)
+        sys.exit(0)
 else:
     print("Please enter tests file name")

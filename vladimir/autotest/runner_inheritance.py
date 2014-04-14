@@ -112,8 +112,8 @@ class TodoTestCase(object):
     def tear_down(self):
         print "teardown"
 
-testrunner = TestRunnerVerboseReporting()
-testrunner.run(TodoTestCase)
+#testrunner = TestRunnerVerboseReporting()
+#testrunner.run(TodoTestCase)
 
-testrunner = TestRunnerFailReporting()
-testrunner.run(TodoTestCase)
+#testrunner = TestRunnerFailReporting()
+#testrunner.run(TodoTestCase)

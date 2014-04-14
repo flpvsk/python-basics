@@ -101,7 +101,7 @@ class TodoTestCase(object):
     def tear_down(self):
         print "teardown"
 
-testrunner = TestRunner()
+#testrunner = TestRunner()
 #testrunner.add_testclass(TodoTestCase)
-print testrunner.pending_tests()
-print testrunner.class_run(TodoTestCase)
+#print testrunner.pending_tests()
+#print testrunner.class_run(TodoTestCase)

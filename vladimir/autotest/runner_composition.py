@@ -127,8 +127,8 @@ class TodoTestCase(object):
         print "teardown"
 
 
-testrunner = TestRunner(VerboseReporter())
-testrunner.run(TodoTestCase)
+#testrunner = TestRunner(VerboseReporter())
+#testrunner.run(TodoTestCase)
 
-testrunner = TestRunner(FailReporter())
-testrunner.run(TodoTestCase)
+#testrunner = TestRunner(FailReporter())
+#testrunner.run(TodoTestCase)
