@@ -60,6 +60,8 @@ class Currency(object):
         return self._exchange_rate[target_curr]
 
 
+    def set_exchange_rate(self, currency, value):
+        self._exchange_rate.update({currency: value})
 
 
 #Constants
@@ -67,12 +69,6 @@ RUBLE=Currency('RUBLE','RUB')
 DOLLAR=Currency('DOLLAR','$')
 EURO=Currency('EURO','�')
 
-
-
-#rates as dict are assigned for each currency
-RUBLE._exchange_rate={DOLLAR:0.33,EURO:0.47, RUBLE:1 }
-DOLLAR._exchange_rate={EURO:1.2, RUBLE:36, DOLLAR:1}
-EURO._exchange_rate={DOLLAR:0.7, RUBLE:49, EURO:1}
 
 
 
@@ -84,4 +80,4 @@ def dollars(n):
 def euro(n):
     return Money(n, EURO)
 
-print euro(20)
+
