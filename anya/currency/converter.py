@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import urllib2
+import json
 #Money entity
 class Money(object):
     
@@ -37,15 +39,23 @@ class Money(object):
 class Currency(object):
 
 
-    def __init__(self, name, symbol):
+    def __init__(self, name, symbol, iso_code):
         
         self._name = name
         self._symbol = symbol
+        self._iso_code = iso_code
         self._exchange_rate = {}
-        
+    
+    
+    @property
+    def iso_code(self):
+        return self._iso_code
+    
+    
     @property    
     def name(self):
         return self._name
+    
     
     @property
     def symbol(self):
@@ -60,19 +70,16 @@ class Currency(object):
         return self._exchange_rate[target_curr]
 
 
+    def set_exchange_rate(self, currency):
+        self.link = LINK+'/currency?from='+self._iso_code+'&to='+currency.iso_code
+        return self._exchange_rate.update({currency: json.load(urllib2.urlopen(self.link))['rate']})
 
 
 #Constants
-RUBLE=Currency('RUBLE','RUB')
-DOLLAR=Currency('DOLLAR','$')
-EURO=Currency('EURO','�')
-
-
-
-#rates as dict are assigned for each currency
-RUBLE._exchange_rate={DOLLAR:0.33,EURO:0.47, RUBLE:1 }
-DOLLAR._exchange_rate={EURO:1.2, RUBLE:36, DOLLAR:1}
-EURO._exchange_rate={DOLLAR:0.7, RUBLE:49, EURO:1}
+RUBLE=Currency('RUBLE','RUB', 'RUB')
+DOLLAR=Currency('DOLLAR','$', 'USD')
+EURO=Currency('EURO','�', 'EUR')
+LINK='http://rate-exchange.appspot.com'
 
 
 
@@ -83,5 +90,3 @@ def dollars(n):
     return Money(n, DOLLAR)
 def euro(n):
     return Money(n, EURO)
-
-print euro(20)

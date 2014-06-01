@@ -15,7 +15,10 @@ class Point(object):
         return self._y
 
 
-start = Point(0, 0)
+start = Point(0, 1)
+start._y=2
+print start.y
+
 print('start.x is %r' % start.x)
 print('start.y is %r' % start.y)
 
